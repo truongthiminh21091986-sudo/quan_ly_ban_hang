@@ -190,11 +190,11 @@
         const sorted = [...history].sort((a,b) => b.isPinned - a.isPinned);
         document.getElementById('historyList').innerHTML = sorted.map(h => `
             <div class="order-card ${h.isPinned ? 'priority' : ''}">
-                <b>${h.ten} - ${h.lop}</b>  
+                <b>${h.ten} - ${h.lop}</b>
                 <div style="font-size:12px; color:#666;">Đã mua: ${h.monAn}</div>
                 <div style="font-weight:bold;">Doanh thu: <span style="color:red">${h.tongTien.toLocaleString()}đ</span> | Lãi: <span style="color:green">${h.tongLai.toLocaleString()}đ</span></div>
                 <div class="flex-group" style="margin-top:10px;">
-                    <button onclick="const i=history.find(x=>x.id===${h.id});i.isPinned=!i.isPinned;save()" style="background:#546e7a; font-size:11px;">Ghim/Hạ</button>  
+                    <button onclick="const i=history.find(x=>x.id===${h.id});i.isPinned=!i.isPinned;save()" style="background:#546e7a; font-size:11px;">Ghim/Hạ</button>
                     <button onclick="history=history.filter(x=>x.id!==${h.id});save()" style="background:#444; font-size:11px;">Xóa</button>
                 </div>
             </div>
@@ -204,4 +204,3 @@
 </script>
 </body>
 </html>
-                                                                                                                                                                                                                                                              
