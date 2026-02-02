@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+        <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
@@ -50,8 +50,7 @@
         <h1>🧧 XUÂN GIÁP THÌN 🧧</h1>
         <p style="font-size: 18px;">Hệ Thống Quản Lý Bán Hàng 8A</p>
         <input type="password" id="passInput" placeholder="Nhập mật khẩu để mở khóa..." onkeyup="checkEnter(event)">
-        <br>
-        <button onclick="unlock()">MỞ CỬA ĐÓN LỘC</button>
+        <br><button onclick="unlock()">MỞ CỬA ĐÓN LỘC</button>
     </div>
 </div>
 
@@ -115,100 +114,3 @@
         if(input === PASS) {
             document.getElementById('lock-screen').style.opacity = "0";
             setTimeout(() => {
-                document.getElementById('lock-screen').style.display = "none";
-                document.getElementById('app').style.display = "block";
-                render();
-            }, 600);
-        } else {
-            alert("Mật khẩu không đúng! Vui lòng thử lại.");
-        }
-    }
-
-    // --- LOGIC ---
-    let prods = JSON.parse(localStorage.getItem('p_v6')) || [];
-    let hist = JSON.parse(localStorage.getItem('h_v6')) || [];
-    let cart = [];
-
-    function save() {
-        localStorage.setItem('p_v6', JSON.stringify(prods));
-        localStorage.setItem('h_v6', JSON.stringify(hist));
-        render();
-    }
-
-    function addProd() {
-        const t = document.getElementById('setupTen').value, v = Number(document.getElementById('setupVon').value), b = Number(document.getElementById('setupBan').value);
-        if(t && b) { prods.push({t, v, b}); save(); }
-    }
-
-    function addCart() {
-        const i = document.getElementById('selectSP').value, sl = Number(document.getElementById('inpSL').value);
-        if(i==="") return;
-        const sp = prods[i], ex = cart.find(c => c.t === sp.t);
-        if(ex) ex.sl += sl; else cart.push({...sp, sl});
-        document.querySelector('#cartTable tbody').innerHTML = cart.map(c => `<tr><td>${c.t}</td><td>x${c.sl}</td><td>${(c.sl*c.b).toLocaleString()}đ</td></tr>`).join('');
-    }
-
-    function fillLop() {
-        const n = document.getElementById('khTen').value.trim().toLowerCase();
-        const f = hist.find(o => o.kh.toLowerCase() === n);
-        if(f) document.getElementById('khLop').value = f.l;
-    }
-
-    function checkout() {
-        const n = document.getElementById('khTen').value.trim(), l = document.getElementById('khLop').value.trim() || "8A";
-        if(!n || cart.length === 0) return;
-        let user = hist.find(o => o.kh.toLowerCase() === n.toLowerCase());
-        if(user) {
-            cart.forEach(c => {
-                let old = user.it.find(i => i.t === c.t);
-                if(old) old.sl += c.sl; else user.it.push(c);
-            });
-            user.time = new Date().toLocaleString();
-        } else {
-            hist.push({kh: n, l: l, it: [...cart], time: new Date().toLocaleString()});
-        }
-        cart = []; document.querySelector('#cartTable tbody').innerHTML = ''; document.getElementById('khTen').value = ''; save();
-    }
-
-    function render() {
-        document.getElementById('menuBody').innerHTML = prods.map((p,i) => `<tr><td>${p.t}</td><td>${p.b.toLocaleString()}đ</td><td><button onclick="prods.splice(${i},1);save()" style="background:none; color:red; cursor:pointer; border:none;">X</button></td></tr>`).join('');
-        document.getElementById('selectSP').innerHTML = prods.map((p,i) => `<option value="${i}">${p.t}</option>`).join('');
-        document.getElementById('listKhach').innerHTML = hist.map(h => `<option value="${h.kh}">`).join('');
-
-        // Sắp xếp theo Tổng Tiền Chi
-        hist.sort((a, b) => {
-            const moneyA = a.it.reduce((s, item) => s + (item.sl * item.b), 0);
-            const moneyB = b.it.reduce((s, item) => s + (item.sl * item.b), 0);
-            return moneyB - moneyA;
-        });
-
-        let tDT = 0, tV = 0, list = document.getElementById('historyList');
-        list.innerHTML = '';
-
-        hist.forEach((h, idx) => {
-            const sl = h.it.reduce((s, i) => s + Number(i.sl), 0);
-            const dt = h.it.reduce((s, i) => s + (i.sl * i.b), 0);
-            const v = h.it.reduce((s, i) => s + (i.sl * (i.v || 0)), 0);
-            tDT += dt; tV += v;
-
-            let bg = "#ffffff", lb = "";
-            if (sl > 50) { bg = "#ffcccc"; lb = "🔥 SỈ > 50"; }
-            else if (sl > 20) { bg = "#d1f7d1"; lb = "✅ ĐƠN > 20"; }
-
-            list.innerHTML += `<div class="order-card" style="background-color: ${bg}; border-color: ${sl > 20 ? (sl > 50 ? 'red' : 'green') : '#eee'}">
-                <div style="display:flex; justify-content:space-between"><b>TOP ${idx+1}: ${h.kh.toUpperCase()} (${h.l})</b> <small>${h.time}</small></div>
-                <div style="font-size:13px; color:#555; margin:5px 0">${h.it.map(i => i.t+'x'+i.sl).join(', ')}</div>
-                <div style="display:flex; justify-content:space-between; align-items:center">
-                    <b style="color:red; font-size:18px">${dt.toLocaleString()}đ</b>
-                    <b>SL: ${sl} món ${lb}</b>
-                    <button onclick="if(confirm('Xóa?')){hist.splice(${idx},1);save()}" style="width:auto; padding:5px 12px; background:#ff5252; color:white; border-radius:5px; border:none; cursor:pointer;">Xóa</button>
-                </div>
-            </div>`;
-        });
-        document.getElementById('tkDT').innerText = tDT.toLocaleString() + "đ";
-        document.getElementById('tkV').innerText = tV.toLocaleString() + "đ";
-        document.getElementById('tkL').innerText = (tDT - tV).toLocaleString() + "đ";
-    }
-</script>
-</body>
-</html>
