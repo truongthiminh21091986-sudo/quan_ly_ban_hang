@@ -2,205 +2,213 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản Lý Bán Hàng Tết - HUST</title>
+    <title>Quản Lý Bán Hàng 8A - Premium</title>
     <style>
         :root { --tet-red: #d32f2f; --tet-gold: #ffeb3b; --bg-xuan: #fffaf0; }
-        body { font-family: 'Segoe UI', Arial, sans-serif; background-color: var(--bg-xuan); margin: 0; padding: 15px; color: #333; }
-        .container { max-width: 800px; margin: auto; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background-color: var(--bg-xuan); margin: 0; padding: 0; overflow-x: hidden; }
         
-        /* MÀN HÌNH KHÓA MÁY CHỦ */
-        #lockScreen { position:fixed; top:0; left:0; width:100%; height:100%; background:var(--tet-red); z-index:9999; display:flex; flex-direction:column; align-items:center; justify-content:center; color:white; text-align:center; padding:20px; }
-        
-        .box { background: white; padding: 15px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin-bottom: 15px; border-left: 5px solid var(--tet-red); }
-        h2, h3 { color: var(--tet-red); margin-top: 0; border-bottom: 1px solid #eee; padding-bottom: 5px; }
-        
-        input, select, button { padding: 10px; margin: 5px 0; border-radius: 6px; border: 1px solid #ccc; width: 100%; box-sizing: border-box; font-size: 14px; }
-        button { background: var(--tet-red); color: white; font-weight: bold; cursor: pointer; border: none; transition: 0.2s; }
-        button:hover { background: #b71c1c; }
-        
-        /* Gợi ý khách hàng */
-        .search-container { position: relative; }
-        .suggestions { position: absolute; background: white; width: 100%; z-index: 100; border: 1px solid #ddd; max-height: 150px; overflow-y: auto; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-        .suggestion-item { padding: 10px; cursor: pointer; border-bottom: 1px solid #eee; text-align: left; color: #333; }
-        .suggestion-item:hover { background: #fff9c4; }
+        /* MÀN HÌNH KHÓA MÀU ĐỎ RỰC RỠ */
+        #lock-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle, #ff5252, #b71c1c);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            z-index: 9999; color: var(--tet-gold); transition: 0.8s;
+        }
+        .lock-box {
+            background: rgba(0, 0, 0, 0.2); padding: 40px; border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3); text-align: center; border: 2px solid var(--tet-gold);
+        }
+        .lock-box h1 { font-size: 40px; margin-bottom: 20px; text-shadow: 2px 2px 5px rgba(0,0,0,0.5); }
+        .lock-box input {
+            padding: 15px; width: 280px; border-radius: 30px; border: none;
+            font-size: 18px; text-align: center; outline: none; box-shadow: inset 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .lock-box button {
+            margin-top: 20px; padding: 12px 40px; border-radius: 30px;
+            background: var(--tet-gold); color: #b71c1c; font-weight: bold;
+            font-size: 18px; border: none; cursor: pointer; transition: 0.3s;
+        }
+        .lock-box button:hover { transform: scale(1.1); background: #fff; }
 
-        /* Bảng hàng hóa */
-        table { width: 100%; border-collapse: collapse; margin: 10px 0; background: #fff; }
-        th, td { border: 1px solid #eee; padding: 8px; text-align: center; }
-        th { background: #fdf2f2; color: var(--tet-red); }
-        .btn-x { background: #ff5252; width: auto; padding: 2px 8px; border-radius: 4px; }
-
-        /* Đơn ghim đặc biệt */
-        .priority { background-color: #ffebee !important; border: 2px solid #ff5252 !important; order: -1; position: relative; }
-        .priority::before { content: "📌 ĐƠN ƯU TIÊN"; position: absolute; top: -10px; right: 10px; background: red; color: white; padding: 2px 8px; font-size: 10px; border-radius: 10px; z-index:10; }
+        /* NỘI DUNG CHÍNH */
+        .container { max-width: 850px; margin: 20px auto; padding: 15px; display: none; }
+        .box { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); margin-bottom: 20px; border-left: 8px solid var(--tet-red); }
+        h3 { color: var(--tet-red); border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        input, select, button { padding: 12px; margin: 5px 0; border-radius: 8px; border: 1px solid #ddd; width: 100%; box-sizing: border-box; }
+        .btn-main { background: var(--tet-red); color: white; font-weight: bold; border: none; cursor: pointer; }
         
-        .order-card { padding: 12px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 10px; background: white; display: flex; flex-direction: column; }
-        .flex-group { display: flex; gap: 8px; }
-        .total-text { font-size: 18px; font-weight: bold; color: var(--tet-red); text-align: right; }
+        .order-card { padding: 15px; border-radius: 12px; margin-bottom: 12px; border: 2px solid #eee; transition: 0.3s; }
+        .stat-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; }
+        .stat-item { padding: 20px; border-radius: 12px; text-align: center; color: white; font-weight: bold; font-size: 16px; }
     </style>
 </head>
 <body>
 
-<!-- MÀM HÌNH KHÓA -->
-<div id="lockScreen">
-    <h1>🧧 MÁY CHỦ 8A 🧧</h1>
-    <p>Vui lòng nhập mật khẩu máy chủ</p>
-    <input type="text" id="serverPass" style="width:250px; text-align:center; color: #000;" placeholder="Nhập mật khẩu...">
-    <button onclick="checkAccess()" style="width:250px; background:var(--tet-gold); color:black; margin-top:10px;">XÁC NHẬN</button>
+<!-- MÀN HÌNH KHÓA -->
+<div id="lock-screen">
+    <div class="lock-box">
+        <h1>🧧 XUÂN GIÁP THÌN 🧧</h1>
+        <p style="font-size: 18px;">Hệ Thống Quản Lý Bán Hàng 8A</p>
+        <input type="password" id="passInput" placeholder="Nhập mật khẩu để mở khóa..." onkeyup="checkEnter(event)">
+        <br>
+        <button onclick="unlock()">MỞ CỬA ĐÓN LỘC</button>
+    </div>
 </div>
 
-<div class="container">
-    <h2>🧧 QUẢN LÝ BÁN HÀNG 8A 🧧</h2>
+<!-- ỨNG DỤNG CHÍNH -->
+<div class="container" id="app">
+    <div class="box" style="display: flex; justify-content: space-between; align-items: center; background: var(--tet-red); color: white;">
+        <h2 style="margin:0">🧧 QUẢN LÝ 8A</h2>
+        <button onclick="location.reload()" style="width: 120px; background: var(--tet-gold); color: #b71c1c; border-radius: 20px;">KHÓA MÁY</button>
+    </div>
 
     <div class="box">
-        <h3>📦 Danh mục Sản phẩm (Gốc)</h3>
-        <div class="flex-group">
+        <h3>📦 Danh mục món</h3>
+        <div style="display:flex; gap:10px">
             <input type="text" id="setupTen" placeholder="Tên món">
-            <input type="number" id="setupVon" placeholder="Giá vốn">
-            <input type="number" id="setupBan" placeholder="Giá bán">
-            <button onclick="addGlobalProduct()" style="width: 120px;">Lưu</button>
+            <input type="number" id="setupVon" placeholder="Vốn">
+            <input type="number" id="setupBan" placeholder="Bán">
+            <button onclick="addProd()" class="btn-main" style="width:100px">LƯU</button>
         </div>
-        <table id="tableMenu">
-            <thead><tr><th>Món</th><th>Bán</th><th>Lãi/Món</th><th>Xóa</th></tr></thead>
-            <tbody></tbody>
+        <table width="100%" style="margin-top:10px; text-align: center;">
+            <thead><tr style="color: #666;"><th>Món</th><th>Bán</th><th>Xóa</th></tr></thead>
+            <tbody id="menuBody"></tbody>
         </table>
     </div>
 
     <div class="box">
-        <h3>📝 Lên Đơn Mới</h3>
-        <div class="search-container">
-            <input type="text" id="khTen" placeholder="Nhập tên khách..." onkeyup="showSearch(this.value)">
-            <div id="boxGoiY" class="suggestions" style="display:none"></div>
+        <h3>📝 Lên đơn & Gộp khách</h3>
+        <div style="display:flex; gap:10px">
+            <input type="text" id="khTen" list="listKhach" placeholder="Tên khách hàng..." onchange="fillLop()">
+            <datalist id="listKhach"></datalist>
+            <input type="text" id="khLop" placeholder="Lớp">
         </div>
-        <input type="text" id="khLop" placeholder="Nhập lớp">
-        
-        <div class="flex-group" style="align-items: center;">
-            <select id="selectSP" style="flex: 2;"></select>
-            <input type="number" id="inpSL" value="1" min="1" style="flex: 0.5; text-align: center;">
-            <button onclick="addToCart()" style="flex: 1; background: #388e3c;">+ Thêm</button>
+        <div style="display:flex; gap:10px">
+            <select id="selectSP"></select>
+            <input type="number" id="inpSL" value="1" min="1" style="width:80px">
+            <button onclick="addCart()" style="background:#388e3c; color:white; font-weight:bold;">+ THÊM</button>
         </div>
-
-        <table>
-            <thead><tr><th>Món</th><th>SL</th><th>Tổng</th><th>#</th></tr></thead>
-            <tbody id="cartBody"></tbody>
-        </table>
-        <p class="total-text">Tổng: <span id="cartTotal">0</span> đ</p>
-        <button onclick="checkout()" style="height: 50px; font-size: 18px; background: #1976d2;">✅ HOÀN THÀNH ĐƠN</button>
+        <table width="100%" id="cartTable"><tbody></tbody></table>
+        <button onclick="checkout()" class="btn-main" style="height: 50px; background: #1976d2; font-size: 18px;">✅ CHỐT ĐƠN & ĐUA TOP</button>
     </div>
 
     <div class="box">
-        <h3>📊 Lịch Sử Khách Hàng</h3>
-        <div id="historyList" style="display: flex; flex-direction: column;"></div>
+        <h3>🏆 BẢNG XẾP HẠNG DOANH THU (TOP CHI TIỀN)</h3>
+        <div id="historyList"></div>
+    </div>
+
+    <div class="box" style="border-left: 8px solid #388e3c;">
+        <div class="stat-grid">
+            <div class="stat-item" style="background:#1976d2">Doanh Thu<br><span id="tkDT">0</span></div>
+            <div class="stat-item" style="background:#f57c00">Tiền Vốn<br><span id="tkV">0</span></div>
+            <div class="stat-item" style="background:#388e3c">Lợi Nhuận<br><span id="tkL">0</span></div>
+        </div>
     </div>
 </div>
 
 <script>
-    const MASTER_KEY = "big family 8A"; // Mật khẩu của bạn
-    let products = JSON.parse(localStorage.getItem('p_8a')) || [];
-    let history = JSON.parse(localStorage.getItem('h_8a')) || [];
+    // --- BẢO MẬT ---
+    const PASS = "big family 8A";
+    function checkEnter(e) { if(e.key === "Enter") unlock(); }
+    function unlock() {
+        const input = document.getElementById('passInput').value;
+        if(input === PASS) {
+            document.getElementById('lock-screen').style.opacity = "0";
+            setTimeout(() => {
+                document.getElementById('lock-screen').style.display = "none";
+                document.getElementById('app').style.display = "block";
+                render();
+            }, 600);
+        } else {
+            alert("Mật khẩu không đúng! Vui lòng thử lại.");
+        }
+    }
+
+    // --- LOGIC ---
+    let prods = JSON.parse(localStorage.getItem('p_v6')) || [];
+    let hist = JSON.parse(localStorage.getItem('h_v6')) || [];
     let cart = [];
 
-    function checkAccess() {
-        if(document.getElementById('serverPass').value === MASTER_KEY) {
-            document.getElementById('lockScreen').style.display = 'none';
-        } else { alert("Sai mật khẩu máy chủ!"); }
+    function save() {
+        localStorage.setItem('p_v6', JSON.stringify(prods));
+        localStorage.setItem('h_v6', JSON.stringify(hist));
+        render();
     }
 
-    function addGlobalProduct() {
-        const ten = document.getElementById('setupTen').value.trim();
-        const von = Number(document.getElementById('setupVon').value);
-        const ban = Number(document.getElementById('setupBan').value);
-        if(!ten || !ban) return alert("Thiếu thông tin!");
-        products.push({ ten, von, ban });
-        save();
-        document.getElementById('setupTen').value=''; document.getElementById('setupVon').value=''; document.getElementById('setupBan').value='';
+    function addProd() {
+        const t = document.getElementById('setupTen').value, v = Number(document.getElementById('setupVon').value), b = Number(document.getElementById('setupBan').value);
+        if(t && b) { prods.push({t, v, b}); save(); }
     }
 
-    function addToCart() {
-        const idx = document.getElementById('selectSP').value;
-        const sl = Number(document.getElementById('inpSL').value);
-        if(idx === "" || sl < 1) return;
-        const sp = products[idx];
-        const ex = cart.find(i => i.ten === sp.ten);
+    function addCart() {
+        const i = document.getElementById('selectSP').value, sl = Number(document.getElementById('inpSL').value);
+        if(i==="") return;
+        const sp = prods[i], ex = cart.find(c => c.t === sp.t);
         if(ex) ex.sl += sl; else cart.push({...sp, sl});
-        renderCart();
+        document.querySelector('#cartTable tbody').innerHTML = cart.map(c => `<tr><td>${c.t}</td><td>x${c.sl}</td><td>${(c.sl*c.b).toLocaleString()}đ</td></tr>`).join('');
     }
 
-    function renderCart() {
-        let t = 0;
-        document.getElementById('cartBody').innerHTML = cart.map((item, i) => {
-            t += (item.ban * item.sl);
-            return `<tr><td>${item.ten}</td><td>${item.sl}</td><td>${(item.ban*item.sl).toLocaleString()}</td>
-            <td><button class="btn-x" onclick="cart.splice(${i},1);renderCart()">X</button></td></tr>`;
-        }).join('');
-        document.getElementById('cartTotal').innerText = t.toLocaleString();
-    }
-
-    function showSearch(val) {
-        const box = document.getElementById('boxGoiY');
-        if(!val) { box.style.display='none'; return; }
-        const unique = []; const seen = new Set();
-        history.forEach(h => { if(!seen.has(h.ten+h.lop)){ seen.add(h.ten+h.lop); unique.push(h); }});
-        const filter = unique.filter(k => k.ten.toLowerCase().includes(val.toLowerCase()));
-        box.innerHTML = filter.map(k => `<div class="suggestion-item" onclick="pick('${k.ten}','${k.lop}')">${k.ten} - <b>${k.lop}</b></div>`).join('');
-        box.style.display = filter.length ? 'block' : 'none';
-    }
-
-    function pick(t, l) {
-        document.getElementById('khTen').value = t;
-        document.getElementById('khLop').value = l;
-        document.getElementById('boxGoiY').style.display='none';
+    function fillLop() {
+        const n = document.getElementById('khTen').value.trim().toLowerCase();
+        const f = hist.find(o => o.kh.toLowerCase() === n);
+        if(f) document.getElementById('khLop').value = f.l;
     }
 
     function checkout() {
-        const ten = document.getElementById('khTen').value.trim();
-        const lop = document.getElementById('khLop').value.trim();
-        if(!ten || !lop || cart.length === 0) return alert("Thiếu thông tin!");
-        const tTien = cart.reduce((s, i) => s + (i.ban * i.sl), 0);
-        const tVon = cart.reduce((s, i) => s + (i.von * i.sl), 0);
-        const monStr = cart.map(i => `${i.ten}(x${i.sl})`).join(', ');
-
-        const oldIdx = history.findIndex(h => h.ten === ten && h.lop === lop);
-        if(oldIdx !== -1) {
-            history[oldIdx].monAn += ", " + monStr;
-            history[oldIdx].tongTien += tTien;
-            history[oldIdx].tongLai += (tTien - tVon);
-            if(history[oldIdx].tongTien >= 100000) history[oldIdx].isPinned = true;
+        const n = document.getElementById('khTen').value.trim(), l = document.getElementById('khLop').value.trim() || "8A";
+        if(!n || cart.length === 0) return;
+        let user = hist.find(o => o.kh.toLowerCase() === n.toLowerCase());
+        if(user) {
+            cart.forEach(c => {
+                let old = user.it.find(i => i.t === c.t);
+                if(old) old.sl += c.sl; else user.it.push(c);
+            });
+            user.time = new Date().toLocaleString();
         } else {
-            history.push({ id: Date.now(), ten, lop, monAn: monStr, tongTien: tTien, tongLai: (tTien-tVon), isPinned: tTien >= 100000 });
+            hist.push({kh: n, l: l, it: [...cart], time: new Date().toLocaleString()});
         }
-        cart = []; renderCart(); save();
-        document.getElementById('khTen').value=''; document.getElementById('khLop').value='';
-        alert("Đã lưu đơn!");
+        cart = []; document.querySelector('#cartTable tbody').innerHTML = ''; document.getElementById('khTen').value = ''; save();
     }
 
-    function save() {
-        localStorage.setItem('p_8a', JSON.stringify(products));
-        localStorage.setItem('h_8a', JSON.stringify(history));
-        renderAll();
-    }
+    function render() {
+        document.getElementById('menuBody').innerHTML = prods.map((p,i) => `<tr><td>${p.t}</td><td>${p.b.toLocaleString()}đ</td><td><button onclick="prods.splice(${i},1);save()" style="background:none; color:red; cursor:pointer; border:none;">X</button></td></tr>`).join('');
+        document.getElementById('selectSP').innerHTML = prods.map((p,i) => `<option value="${i}">${p.t}</option>`).join('');
+        document.getElementById('listKhach').innerHTML = hist.map(h => `<option value="${h.kh}">`).join('');
 
-    function renderAll() {
-        document.querySelector('#tableMenu tbody').innerHTML = products.map((p, i) => `
-            <tr><td>${p.ten}</td><td>${p.ban}</td><td>${p.ban-p.von}</td>
-            <td><button class="btn-x" onclick="products.splice(${i},1);save()">X</button></td></tr>
-        `).join('');
-        document.getElementById('selectSP').innerHTML = products.map((p, i) => `<option value="${i}">${p.ten}</option>`).join('');
-        const sorted = [...history].sort((a,b) => b.isPinned - a.isPinned);
-        document.getElementById('historyList').innerHTML = sorted.map(h => `
-            <div class="order-card ${h.isPinned ? 'priority' : ''}">
-                <b>${h.ten} - ${h.lop}</b>
-                <div style="font-size:12px; color:#666;">Đã mua: ${h.monAn}</div>
-                <div style="font-weight:bold;">Doanh thu: <span style="color:red">${h.tongTien.toLocaleString()}đ</span> | Lãi: <span style="color:green">${h.tongLai.toLocaleString()}đ</span></div>
-                <div class="flex-group" style="margin-top:10px;">
-                    <button onclick="const i=history.find(x=>x.id===${h.id});i.isPinned=!i.isPinned;save()" style="background:#546e7a; font-size:11px;">Ghim/Hạ</button>
-                    <button onclick="history=history.filter(x=>x.id!==${h.id});save()" style="background:#444; font-size:11px;">Xóa</button>
+        // Sắp xếp theo Tổng Tiền Chi
+        hist.sort((a, b) => {
+            const moneyA = a.it.reduce((s, item) => s + (item.sl * item.b), 0);
+            const moneyB = b.it.reduce((s, item) => s + (item.sl * item.b), 0);
+            return moneyB - moneyA;
+        });
+
+        let tDT = 0, tV = 0, list = document.getElementById('historyList');
+        list.innerHTML = '';
+
+        hist.forEach((h, idx) => {
+            const sl = h.it.reduce((s, i) => s + Number(i.sl), 0);
+            const dt = h.it.reduce((s, i) => s + (i.sl * i.b), 0);
+            const v = h.it.reduce((s, i) => s + (i.sl * (i.v || 0)), 0);
+            tDT += dt; tV += v;
+
+            let bg = "#ffffff", lb = "";
+            if (sl > 50) { bg = "#ffcccc"; lb = "🔥 SỈ > 50"; }
+            else if (sl > 20) { bg = "#d1f7d1"; lb = "✅ ĐƠN > 20"; }
+
+            list.innerHTML += `<div class="order-card" style="background-color: ${bg}; border-color: ${sl > 20 ? (sl > 50 ? 'red' : 'green') : '#eee'}">
+                <div style="display:flex; justify-content:space-between"><b>TOP ${idx+1}: ${h.kh.toUpperCase()} (${h.l})</b> <small>${h.time}</small></div>
+                <div style="font-size:13px; color:#555; margin:5px 0">${h.it.map(i => i.t+'x'+i.sl).join(', ')}</div>
+                <div style="display:flex; justify-content:space-between; align-items:center">
+                    <b style="color:red; font-size:18px">${dt.toLocaleString()}đ</b>
+                    <b>SL: ${sl} món ${lb}</b>
+                    <button onclick="if(confirm('Xóa?')){hist.splice(${idx},1);save()}" style="width:auto; padding:5px 12px; background:#ff5252; color:white; border-radius:5px; border:none; cursor:pointer;">Xóa</button>
                 </div>
-            </div>
-        `).join('');
+            </div>`;
+        });
+        document.getElementById('tkDT').innerText = tDT.toLocaleString() + "đ";
+        document.getElementById('tkV').innerText = tV.toLocaleString() + "đ";
+        document.getElementById('tkL').innerText = (tDT - tV).toLocaleString() + "đ";
     }
-    renderAll();
 </script>
 </body>
 </html>
