@@ -1,4 +1,4 @@
-        <!DOCTYPE html>
+!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
@@ -114,3 +114,71 @@
         if(input === PASS) {
             document.getElementById('lock-screen').style.opacity = "0";
             setTimeout(() => {
+
+                                                                                                           <b style="font-size: 18px;">🧧 QUẢN LÝ 8A</b>
+        <button onclick="location.reload()" style="width: 80px; background: var(--tet-gold); color: #b71c1c; padding: 5px; font-size: 12px;">KHÓA</button>
+    </div>
+
+    <!-- 1. CÀI ĐẶT -->
+    <div class="box">
+        <h3>📦 Danh mục món</h3>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 5px;">
+            <input type="text" id="setupTen" placeholder="Tên món" style="grid-column: span 2;">
+            <input type="number" id="setupVon" placeholder="Vốn">
+            <input type="number" id="setupBan" placeholder="Bán">
+        </div>
+        <button onclick="addProd()" style="background: var(--tet-red); margin-top: 10px;">LƯU VÀO DANH MỤC</button>
+        <table width="100%" id="menuTable" style="margin-top:10px; text-align: center; font-size: 13px;">
+            <thead><tr style="color:#888;"><th>Món</th><th>Bán</th><th>X</th></tr></thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <!-- 2. LÊN ĐƠN -->
+    <div class="box">
+        <h3>📝 Lên đơn (Gộp khách)</h3>
+        <input type="text" id="khTen" list="listKhach" placeholder="Tên khách hàng..." onchange="fillLop()">
+        <datalist id="listKhach"></datalist>
+        <input type="text" id="khLop" placeholder="Lớp">
+        
+        <div style="display:flex; gap:5px; margin-top: 5px;">
+            <select id="selectSP" style="flex: 2;"></select>
+            <input type="number" id="inpSL" value="1" min="1" style="flex: 0.7; text-align: center;">
+        </div>
+        <button onclick="addCart()" style="background:#388e3c;">+ THÊM VÀO GIỎ</button>
+        <table id="cartTable" width="100%" style="font-size: 13px;"><tbody></tbody></table>
+        <button onclick="checkout()" style="background:#1976d2; height: 50px; font-size: 16px;">✅ CHỐT ĐƠN & XẾP TOP TIỀN</button>
+    </div>
+
+    <!-- 3. LỊCH SỬ -->
+    <div class="box">
+        <h3>🏆 BẢNG XẾP HẠNG DOANH THU</h3>
+        <div id="historyList"></div>
+    </div>
+
+    <!-- 4. TỔNG KẾT -->
+    <div class="box">
+        <div class="stat-grid">
+            <div class="stat-item" style="background:#1976d2">Doanh Thu<br><span id="tkDT">0</span></div>
+            <div class="stat-item" style="background:#f57c00">Tiền Vốn<br><span id="tkV">0</span></div>
+            <div class="stat-item" style="background:#388e3c">Lợi Nhuận<br><span id="tkL">0</span></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const PASS_KEY = "big family 8A";
+
+    // Hàm mở khóa bằng nút bấm
+    function unlock() {
+        const val = document.getElementById('passInput').value;
+        if(val === PASS_KEY) {
+            document.getElementById('lock-screen').style.display = "none";
+            document.getElementById('app-container').style.display = "block";
+            render();
+        } else {
+            alert("Mật khẩu sai rồi! Thử lại nhé.");
+        }
+    }
+
+    // DỮ LIỆU
