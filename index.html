@@ -8,7 +8,7 @@
         :root { --tet-red: #d32f2f; --tet-gold: #ffeb3b; --bg-xuan: #fffaf0; }
         body { font-family: 'Segoe UI', Arial, sans-serif; background-color: var(--bg-xuan); margin: 0; padding: 0; }
         
-        /* MÀN HÌNH KHÓA ĐỎ RỰC RỠ */
+        /* MÀN HÌNH KHÓA */
         #lock-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: linear-gradient(135deg, #ff5252, #b71c1c);
@@ -16,15 +16,10 @@
             z-index: 9999; color: var(--tet-gold); text-align: center;
         }
         .lock-box { width: 85%; max-width: 350px; padding: 30px; border-radius: 20px; border: 3px solid var(--tet-gold); background: rgba(0,0,0,0.1); }
-        #passInput { 
-            width: 100%; padding: 15px; border-radius: 30px; border: none; 
-            font-size: 18px; text-align: center; margin-top: 20px; outline: none;
-        }
-        .btn-unlock { 
-            width: 100%; margin-top: 15px; padding: 15px; border-radius: 30px; 
-            background: var(--tet-gold); color: #b71c1c; font-weight: bold; 
-            font-size: 18px; border: none; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-        }
+        .pass-row { display: flex; gap: 10px; margin-top: 20px; align-items: center; }
+        #passInput { flex: 1; padding: 15px; border-radius: 30px; border: none; font-size: 18px; text-align: center; outline: none; min-width: 0; }
+        .eye-btn { width: 50px; height: 50px; border-radius: 50%; background: var(--tet-gold); border: 2px solid #b71c1c; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .btn-unlock { width: 100%; margin-top: 15px; padding: 15px; border-radius: 30px; background: var(--tet-gold); color: #b71c1c; font-weight: bold; font-size: 18px; border: none; cursor: pointer; }
 
         /* APP CHÍNH */
         #app-container { max-width: 800px; margin: auto; padding: 10px; display: none; }
@@ -32,69 +27,66 @@
         h3 { color: var(--tet-red); margin: 0 0 10px 0; font-size: 18px; }
         input, select, button { padding: 12px; margin: 5px 0; border-radius: 8px; border: 1px solid #ccc; width: 100%; box-sizing: border-box; font-size: 14px; }
         
-        /* MÀU SẮC THẺ ĐƠN HÀNG */
-        .order-card { padding: 12px; border-radius: 12px; margin-bottom: 10px; border: 2px solid #eee; }
+        .order-card { padding: 12px; border-radius: 12px; margin-bottom: 10px; border: 2px solid #eee; position: relative; }
+        .del-order { position: absolute; top: 10px; right: 10px; background: none; border: none; color: #d32f2f; font-weight: bold; font-size: 18px; width: auto; padding: 0; cursor: pointer; }
+        
         .stat-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
         .stat-item { padding: 10px; border-radius: 10px; text-align: center; color: white; font-size: 12px; font-weight: bold; }
     </style>
 </head>
 <body>
 
-<!-- MÀN HÌNH KHÓA -->
 <div id="lock-screen">
     <div class="lock-box">
         <h1 style="margin:0; font-size: 30px;">🧧 TẾT 2026 🧧</h1>
         <p style="margin: 10px 0;">Chào mừng Big Family 8A</p>
-        <input type="password" id="passInput" placeholder="Nhập mật khẩu...">
+        <div class="pass-row"><input type="password" id="passInput" placeholder="Mật khẩu...">
+            <button class="eye-btn" onclick="togglePass()" id="eyeBtn">👁️</button>
+        </div>
         <button class="btn-unlock" onclick="unlock()">MỞ CỬA ĐÓN LỘC</button>
     </div>
 </div>
 
-<!-- NỘI DUNG ỨNG DỤNG -->
 <div id="app-container">
     <div class="box" style="display: flex; justify-content: space-between; align-items: center; background: var(--tet-red); color: white; border: none;">
         <b style="font-size: 18px;">🧧 QUẢN LÝ 8A</b>
-        <button onclick="location.reload()" style="width: 80px; background: var(--tet-gold); color: #b71c1c; padding: 5px; font-size: 12px;">KHÓA</button>
+        <button onclick="location.reload()" style="width: 80px; background: var(--tet-gold); color: #b71c1c; padding: 5px; font-size: 12px; border:none; border-radius:5px;">KHÓA</button>
     </div>
 
-    <!-- 1. CÀI ĐẶT -->
     <div class="box">
         <h3>📦 Danh mục món</h3>
+        <input type="text" id="setupTen" placeholder="Tên món">
+        <input type="number" id="setupBan" placeholder="Giá bán">
         <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 5px;">
-            <input type="text" id="setupTen" placeholder="Tên món" style="grid-column: span 2;">
-            <input type="number" id="setupVon" placeholder="Vốn">
-            <input type="number" id="setupBan" placeholder="Bán">
+            <input type="number" id="setupVon" placeholder="Vốn" oninput="logicIn('von')">
+            <input type="number" id="setupLai" placeholder="Lãi" oninput="logicIn('lai')">
         </div>
-        <button onclick="addProd()" style="background: var(--tet-red); margin-top: 10px;">LƯU VÀO DANH MỤC</button>
+        <button onclick="addProd()" style="background: var(--tet-red); color:white; border:none; font-weight:bold; margin-top: 10px;">LƯU VÀO DANH MỤC</button>
         <table width="100%" id="menuTable" style="margin-top:10px; text-align: center; font-size: 13px;">
             <thead><tr style="color:#888;"><th>Món</th><th>Bán</th><th>X</th></tr></thead>
             <tbody></tbody>
         </table>
     </div>
 
-    <!-- 2. LÊN ĐƠN -->
     <div class="box">
-        <h3>📝 Lên đơn (Gộp khách)</h3>
+        <h3>📝 Lên đơn</h3>
         <input type="text" id="khTen" list="listKhach" placeholder="Tên khách hàng..." onchange="fillLop()">
         <datalist id="listKhach"></datalist>
         <input type="text" id="khLop" placeholder="Lớp">
-        
         <div style="display:flex; gap:5px; margin-top: 5px;">
             <select id="selectSP" style="flex: 2;"></select>
             <input type="number" id="inpSL" value="1" min="1" style="flex: 0.7; text-align: center;">
         </div>
-        <button onclick="addCart()" style="background:#388e3c;">+ THÊM VÀO GIỎ</button>
+        <button onclick="addCart()" style="background:#388e3c; color:white; border:none;">+ THÊM VÀO GIỎ</button>
         <table id="cartTable" width="100%" style="font-size: 13px;"><tbody></tbody></table>
-        <button onclick="checkout()" style="background:#1976d2; height: 50px; font-size: 16px;">✅ CHỐT ĐƠN & XẾP TOP TIỀN</button>
+        <button onclick="checkout()" style="background:#1976d2; color:white; height: 50px; font-size: 16px; border:none; font-weight:bold;">✅ CHỐT ĐƠN</button>
     </div>
 
-    <!-- 3. LỊCH SỬ -->
     <div class="box">
-        <h3>🏆 BẢNG XẾP HẠNG DOANH THU</h3>
+        <h3>🏆 LỊCH SỬ GIAO DỊCH</h3>
         <div id="historyList"></div>
     </div>
 
-    <!-- 4. TỔNG KẾT -->
     <div class="box">
         <div class="stat-grid">
             <div class="stat-item" style="background:#1976d2">Doanh Thu<br><span id="tkDT">0</span></div>
@@ -103,107 +95,3 @@
         </div>
     </div>
 </div>
-
-<script>
-    const PASS_KEY = "big family 8A";
-
-    // Hàm mở khóa bằng nút bấm
-    function unlock() {
-        const val = document.getElementById('passInput').value;
-        if(val === PASS_KEY) {
-            document.getElementById('lock-screen').style.display = "none";
-            document.getElementById('app-container').style.display = "block";
-            render();
-        } else {
-            alert("Mật khẩu sai rồi! Thử lại nhé.");
-        }
-    }
-
-    // DỮ LIỆU
-    let prods = JSON.parse(localStorage.getItem('p_8a_m')) || [];
-    let hist = JSON.parse(localStorage.getItem('h_8a_m')) || [];
-    let cart = [];
-
-    function save() {
-        localStorage.setItem('p_8a_m', JSON.stringify(prods));
-        localStorage.setItem('h_8a_m', JSON.stringify(hist));
-        render();
-    }
-
-    function addProd() {
-        const t = document.getElementById('setupTen').value, v = Number(document.getElementById('setupVon').value), b = Number(document.getElementById('setupBan').value);
-        if(t && b) { prods.push({t, v, b}); save(); document.getElementById('setupTen').value=''; }
-    }
-
-    function addCart() {
-        const i = document.getElementById('selectSP').value, sl = Number(document.getElementById('inpSL').value);
-        if(i==="") return;
-        const sp = prods[i], ex = cart.find(c => c.t === sp.t);
-        if(ex) ex.sl += sl; else cart.push({...sp, sl});
-        document.querySelector('#cartTable tbody').innerHTML = cart.map(c => `<tr><td>${c.t}</td><td>x${c.sl}</td><td>${(c.sl*c.b).toLocaleString()}đ</td></tr>`).join('');
-    }
-
-    function fillLop() {
-        const n = document.getElementById('khTen').value.trim().toLowerCase();
-        const f = hist.find(o => o.kh.toLowerCase() === n);
-        if(f) document.getElementById('khLop').value = f.l;
-    }
-
-    function checkout() {
-        const n = document.getElementById('khTen').value.trim(), l = document.getElementById('khLop').value.trim() || "8A";
-        if(!n || cart.length === 0) return alert("Nhập tên khách và món!");
-        let user = hist.find(o => o.kh.toLowerCase() === n.toLowerCase());
-        if(user) {
-            cart.forEach(c => {
-                let old = user.it.find(i => i.t === c.t);
-                if(old) old.sl += c.sl; else user.it.push(c);
-            });
-            user.time = new Date().toLocaleString('vi-VN');
-        } else {
-            hist.push({kh: n, l: l, it: [...cart], time: new Date().toLocaleString('vi-VN')});
-        }
-        cart = []; document.querySelector('#cartTable tbody').innerHTML = ''; document.getElementById('khTen').value = ''; save();
-    }
-
-    function render() {
-        document.querySelector('#menuTable tbody').innerHTML = prods.map((p,i) => `<tr><td>${p.t}</td><td>${p.b.toLocaleString()}</td><td><button onclick="prods.splice(${i},1);save()" style="background:none; color:red; width:auto; border:none; padding:0;">X</button></td></tr>`).join('');
-        document.getElementById('selectSP').innerHTML = prods.map((p,i) => `<option value="${i}">${p.t}</option>`).join('');
-        document.getElementById('listKhach').innerHTML = hist.map(h => `<option value="${h.kh}">`).join('');
-
-        // ĐUA TOP TIỀN
-        hist.sort((a, b) => {
-            const moneyA = a.it.reduce((sum, item) => sum + (item.sl * item.b), 0);
-            const moneyB = b.it.reduce((sum, item) => sum + (item.sl * item.b), 0);
-            return moneyB - moneyA;
-        });
-
-        let tDT = 0, tV = 0, list = document.getElementById('historyList');
-        list.innerHTML = '';
-
-        hist.forEach((h, idx) => {
-            const sl = h.it.reduce((s, i) => s + Number(i.sl), 0);
-            const dt = h.it.reduce((s, i) => s + (i.sl * i.b), 0);
-            const v = h.it.reduce((s, i) => s + (i.sl * (i.v || 0)), 0);
-            tDT += dt; tV += v;
-
-            let bg = "#ffffff", lb = "";
-            if (sl > 50) { bg = "#ffcccc"; lb = "🔥 SỈ VIP"; }
-            else if (sl > 20) { bg = "#d1f7d1"; lb = "✅ ĐƠN LỚN"; }
-
-            list.innerHTML += `<div class="order-card" style="background-color: ${bg}; border-color: ${sl > 20 ? (sl > 50 ? 'red' : 'green') : '#eee'}">
-                <div style="display:flex; justify-content:space-between; font-size: 14px;"><b>TOP ${idx+1}: ${h.kh.toUpperCase()}</b> <small style="font-size:10px;">${h.time}</small></div>
-                <div style="font-size:12px; color:#555; margin:5px 0">${h.it.map(i => i.t+'x'+i.sl).join(', ')}</div>
-                <div style="display:flex; justify-content:space-between; align-items:center">
-                    <b style="color:red; font-size:16px">${dt.toLocaleString()}đ</b>
-                    <span style="font-size:12px;">SL: ${sl} ${lb}</span>
-                    <button onclick="if(confirm('Xóa?')){hist.splice(${idx},1);save()}" style="width:auto; padding:5px 10px; background:#ff5252; color:white; border:none; font-size:10px;">Xóa</button>
-                </div>
-            </div>`;
-        });
-        document.getElementById('tkDT').innerText = tDT.toLocaleString() + "đ";
-        document.getElementById('tkV').innerText = tV.toLocaleString() + "đ";
-        document.getElementById('tkL').innerText = (tDT - tV).toLocaleString() + "đ";
-    }
-</script>
-</body>
-</html>
