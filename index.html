@@ -31,7 +31,8 @@
         .order-info { flex: 1; padding: 12px; }
         .del-zone { background: #ffebee; color: #d32f2f; width: 65px; align-self: stretch; display: flex; align-items: center; justify-content: center; font-size: 26px; font-weight: bold; cursor: pointer; -webkit-user-select: none; }
         
-        .stat-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }.stat-item { padding: 10px; border-radius: 10px; text-align: center; color: white; font-size: 11px; font-weight: bold; }
+        .stat-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+        .stat-item { padding: 10px; border-radius: 10px; text-align: center; color: white; font-size: 11px; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -88,3 +89,112 @@
         <div class="stat-grid">
             <div class="stat-item" style="background:#1976d2">D.Thu<br><span id="tkDT">0</span></div>
             <div class="stat-item" style="background:#f57c00">Vốn<br><span id="tkV">0</span></div>
+            <div class="stat-item" style="background:#388e3c">Lãi<br><span id="tkL">0</span></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const PASS_KEY = "big family 8a";
+
+    function togglePass() {
+        const inp = document.getElementById('passInput');
+        const btn = document.getElementById('eyeBtn');
+        if (inp.type === "password") {
+            inp.type = "text";
+            btn.innerText = "🙈";
+        } else {
+            inp.type = "password";
+            btn.innerText = "👁️";
+        }
+    }
+
+    function unlock() {
+        if(document.getElementById('passInput').value.toLowerCase() === PASS_KEY) {
+            document.getElementById('lock-screen').style.display = "none";
+            document.getElementById('app-container').style.display = "block";
+            render();
+        } else { alert("Sai mật khẩu!"); }
+    }
+
+    function linkIn(type) {
+        const v = document.getElementById('setupVon'), l = document.getElementById('setupLai');
+        if(type === 'von') { l.disabled = v.value !== ""; }
+        else { v.disabled = l.value !== ""; }
+    }
+
+    let prods = JSON.parse(localStorage.getItem('p8a_vFinal')) || [];
+    let hist = JSON.parse(localStorage.getItem('h8a_vFinal')) || [];
+    let cart = [];
+
+    function save() {
+        localStorage.setItem('p8a_vFinal', JSON.stringify(prods));
+        localStorage.setItem('h8a_vFinal', JSON.stringify(hist));
+        render();
+    }
+
+    function addProd() {
+        const t = document.getElementById('setupTen').value, b = Number(document.getElementById('setupBan').value);
+        const vV = document.getElementById('setupVon').value, lL = document.getElementById('setupLai').value;
+        if(!t || !b) return;
+        let v = (vV !== "") ? Number(vV) : (lL !== "" ? b - Number(lL) : 0);
+        prods.push({t, v, b}); save();
+        document.getElementById('setupTen').value=''; document.getElementById('setupBan').value='';
+        document.getElementById('setupVon').value=''; document.getElementById('setupLai').value='';
+        document.getElementById('setupVon').disabled = false; document.getElementById('setupLai').disabled = false;
+    }
+
+    function addCart() {
+        const i = document.getElementById('selectSP').value, sl = Number(document.getElementById('inpSL').value);
+        if(i==="") return;
+        const sp = prods[i], ex = cart.find(c => c.t === sp.t);
+        if(ex) ex.sl += sl; else cart.push({...sp, sl});
+        document.querySelector('#cartTable tbody').innerHTML = cart.map(c => `<tr><td>${c.t}</td><td>x${c.sl}</td><td>${(c.sl*c.b).toLocaleString()}đ</td></tr>`).join('');
+    }
+
+    function fillLop() {
+        const n = document.getElementById('khTen').value.trim().toLowerCase();
+        const f = hist.find(o => o.kh.toLowerCase() === n);
+        if(f) document.getElementById('khLop').value = f.l;
+    }
+
+    function checkout() {
+        const n = document.getElementById('khTen').value.trim(), l = document.getElementById('khLop').value.trim() || "8A";
+        if(!n || cart.length === 0) return alert("Thiếu tên hoặc món!");
+        hist.push({id: Date.now(), kh: n, l: l, it: [...cart]});
+        cart = []; document.querySelector('#cartTable tbody').innerHTML = ''; document.getElementById('khTen').value = ''; save();
+    }
+
+    function delOrder(id) {
+        if(confirm("Xóa đơn này?")) { hist = hist.filter(h => h.id !== id); save(); }
+    }
+
+    function render() {
+        document.getElementById('selectSP').innerHTML = '<option value="">-- Chọn món --</option>' + prods.map((p,i) => `<option value="${i}">${p.t}</option>`).join('');
+        document.querySelector('#menuTable tbody').innerHTML = prods.map((p,i) => `<tr><td style="text-align:left">${p.t}</td><td>${p.b.toLocaleString()}</td><td><div onclick="prods.splice(${i},1);save()" style="color:red; font-weight:bold; font-size:20px; padding:10px;">✕</div></td></tr>`).join('');
+        
+        let dt = 0, v = 0;
+        const sorted = [...hist].reverse().map(h => {
+            let hDT = h.it.reduce((s,i) => s + (i.sl*i.b), 0), hV = h.it.reduce((s,i) => s + (i.sl*i.v), 0);
+            dt += hDT; v += hV;
+            return {...h, total: hDT};
+        });
+
+        document.getElementById('historyList').innerHTML = sorted.map((h) => `
+            <div class="order-card">
+                <div class="order-info">
+                    <b>${h.kh} (${h.l})</b><br>
+                    <b style="color:var(--tet-red)">${h.total.toLocaleString()}đ</b><br>
+                    <small>${h.it.map(i => i.t+' x'+i.sl).join(', ')}</small>
+                </div>
+                <div class="del-zone" ontouchend="delOrder(${h.id})" onclick="delOrder(${h.id})">✕</div>
+            </div>`).join('');
+
+        document.getElementById('tkDT').innerText = dt.toLocaleString();
+        document.getElementById('tkV').innerText = v.toLocaleString();
+        document.getElementById('tkL').innerText = (dt - v).toLocaleString();
+        document.getElementById('listKhach').innerHTML = hist.map(h => `<option value="${h.kh}">`).join('');
+    }
+</script>
+</body>
+</html>
