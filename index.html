@@ -40,7 +40,8 @@
     <div class="lock-box">
         <h1 style="margin:0; font-size: 30px;">🧧 TẾT 2026 🧧</h1>
         <p style="margin: 10px 0;">Chào mừng Big Family 8A</p>
-        <div class="pass-row"><input type="password" id="passInput" placeholder="Mật khẩu...">
+        <div class="pass-row">
+            <input type="password" id="passInput" placeholder="Mật khẩu...">
             <button class="eye-btn" onclick="togglePass()" id="eyeBtn">👁️</button>
         </div>
         <button class="btn-unlock" onclick="unlock()">MỞ CỬA ĐÓN LỘC</button>
@@ -95,3 +96,103 @@
         </div>
     </div>
 </div>
+
+<script>
+    const PASS_KEY = "big family 8A";
+
+    function togglePass() {
+        const inp = document.getElementById('passInput');
+        const btn = document.getElementById('eyeBtn');
+        inp.type = inp.type === "password" ? "text" : "password";
+        btn.innerText = inp.type === "password" ? "👁️" : "🙈";
+    }
+
+    function unlock() {
+        if(document.getElementById('passInput').value === PASS_KEY) {
+            document.getElementById('lock-screen').style.display = "none";
+            document.getElementById('app-container').style.display = "block";
+            render();
+        } else { alert("Sai mật khẩu!"); }
+    }
+
+    function logicIn(type) {
+        const v = document.getElementById('setupVon'), l = document.getElementById('setupLai');
+        if(type === 'von') { l.disabled = v.value !== ""; if(v.value !== "") l.value = ""; }
+        else { v.disabled = l.value !== ""; if(l.value !== "") v.value = ""; }
+    }
+
+    let prods = JSON.parse(localStorage.getItem('p_8a_final')) || [];
+    let hist = JSON.parse(localStorage.getItem('h_8a_final')) || [];
+    let cart = [];
+
+    function save() {
+        localStorage.setItem('p_8a_final', JSON.stringify(prods));
+        localStorage.setItem('h_8a_final', JSON.stringify(hist));
+        render();
+    }
+
+    function addProd() {
+        const t = document.getElementById('setupTen').value, b = Number(document.getElementById('setupBan').value);
+        const vV = document.getElementById('setupVon').value, lL = document.getElementById('setupLai').value;
+        if(!t || !b) return;
+        let v = (vV !== "") ? Number(vV) : (lL !== "" ? b - Number(lL) : 0);
+        prods.push({t, v, b}); save();
+        document.getElementById('setupTen').value=''; document.getElementById('setupBan').value='';
+        document.getElementById('setupVon').value=''; document.getElementById('setupLai').value='';
+        document.getElementById('setupVon').disabled = false; document.getElementById('setupLai').disabled = false;
+    }
+
+    function addCart() {
+        const i = document.getElementById('selectSP').value, sl = Number(document.getElementById('inpSL').value);
+        if(i==="") return;
+        const sp = prods[i], ex = cart.find(c => c.t === sp.t);
+        if(ex) ex.sl += sl; else cart.push({...sp, sl});
+        document.querySelector('#cartTable tbody').innerHTML = cart.map(c => `<tr><td>${c.t}</td><td>x${c.sl}</td><td>${(c.sl*c.b).toLocaleString()}đ</td></tr>`).join('');
+    }
+
+    function fillLop() {
+        const n = document.getElementById('khTen').value.trim().toLowerCase();
+        const f = hist.find(o => o.kh.toLowerCase() === n);
+        if(f) document.getElementById('khLop').value = f.l;
+    }
+
+    function checkout() {
+        const n = document.getElementById('khTen').value.trim(), l = document.getElementById('khLop').value.trim() || "8A";
+        if(!n || cart.length === 0) return alert("Nhập tên và chọn món!");
+        hist.push({id: Date.now(), kh: n, l: l, it: [...cart]});
+        cart = []; document.querySelector('#cartTable tbody').innerHTML = ''; document.getElementById('khTen').value = ''; save();
+    }
+
+    function deleteOrder(id) {
+        if(confirm("Bạn có chắc muốn xóa đơn này không?")) {
+            hist = hist.filter(h => h.id !== id);
+            save();
+        }
+    }
+
+    function render() {
+        document.getElementById('selectSP').innerHTML = '<option value="">-- Chọn món --</option>' + prods.map((p,i) => `<option value="${i}">${p.t}</option>`).join('');
+        document.querySelector('#menuTable tbody').innerHTML = prods.map((p,i) => `<tr><td>${p.t}</td><td>${p.b.toLocaleString()}đ</td><td><button onclick="prods.splice(${i},1);save()" style="border:none; background:none; color:red">✕</button></td></tr>`).join('');
+        
+        let dt = 0, v = 0;
+        const sorted = [...hist].reverse().map(h => {
+            let hDT = h.it.reduce((s,i) => s + (i.sl*i.b), 0), hV = h.it.reduce((s,i) => s + (i.sl*i.v), 0);
+            dt += hDT; v += hV;
+            return {...h, total: hDT};
+        });
+
+        document.getElementById('historyList').innerHTML = sorted.map((h) => `
+            <div class="order-card">
+                <button class="del-order" onclick="deleteOrder(${h.id})">✕</button>
+                <b>${h.kh} (${h.l})</b> - <span style="color:var(--tet-red)">${h.total.toLocaleString()}đ</span><br>
+                <small>${h.it.map(i => i.t+' x'+i.sl).join(', ')}</small>
+            </div>`).join('');
+
+        document.getElementById('tkDT').innerText = dt.toLocaleString();
+        document.getElementById('tkV').innerText = v.toLocaleString();
+        document.getElementById('tkL').innerText = (dt - v).toLocaleString();
+        document.getElementById('listKhach').innerHTML = hist.map(h => `<option value="${h.kh}">`).join('');
+    }
+</script>
+</body>
+</html>
