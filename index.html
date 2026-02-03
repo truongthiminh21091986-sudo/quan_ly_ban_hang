@@ -2,56 +2,55 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản Lý Bán Hàng 8A - Mobile</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>8A - QUẢN LÝ XUÂN 2026</title>
     <style>
         :root { --tet-red: #d32f2f; --tet-gold: #ffeb3b; --bg-xuan: #fffaf0; }
-        body { font-family: 'Segoe UI', Arial, sans-serif; background-color: var(--bg-xuan); margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background-color: var(--bg-xuan); margin: 0; padding: 0; touch-action: manipulation; }
         
         /* MÀN HÌNH KHÓA */
-        #lock-screen {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(135deg, #ff5252, #b71c1c);
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            z-index: 9999; color: var(--tet-gold); text-align: center;
-        }
-        .lock-box { width: 85%; max-width: 350px; padding: 30px; border-radius: 20px; border: 3px solid var(--tet-gold); background: rgba(0,0,0,0.1); }
-        .pass-row { display: flex; gap: 10px; margin-top: 20px; align-items: center; }
-        #passInput { flex: 1; padding: 15px; border-radius: 30px; border: none; font-size: 18px; text-align: center; outline: none; min-width: 0; }
-        .eye-btn { width: 50px; height: 50px; border-radius: 50%; background: var(--tet-gold); border: 2px solid #b71c1c; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-        .btn-unlock { width: 100%; margin-top: 15px; padding: 15px; border-radius: 30px; background: var(--tet-gold); color: #b71c1c; font-weight: bold; font-size: 18px; border: none; cursor: pointer; }
+        #lock-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #ff5252, #b71c1c); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; color: var(--tet-gold); text-align: center; }
+        .lock-box { width: 90%; max-width: 350px; padding: 25px; border-radius: 15px; border: 3px solid var(--tet-gold); background: rgba(0,0,0,0.1); }
+        .pass-row { display: flex; background: white; border-radius: 10px; margin: 20px 0; overflow: hidden; height: 55px; align-items: center; }
+        #passInput { flex: 1; border: none; padding: 0 15px; font-size: 18px; outline: none; height: 100%; width: 100%; }
+        
+        /* NÚT MẮT SIÊU NHẠY */
+        .eye-touch { width: 65px; height: 100%; background: #eee; border-left: 1px solid #ddd; font-size: 26px; display: flex; align-items: center; justify-content: center; cursor: pointer; -webkit-user-select: none; }
+
+        /* NÚT MỞ KHÓA SIÊU NHẠY */
+        .btn-touch-unlock { width: 100%; padding: 15px; border-radius: 10px; background: var(--tet-gold); color: #b71c1c; font-weight: bold; font-size: 20px; cursor: pointer; border: none; box-sizing: border-box; -webkit-user-select: none; }
 
         /* APP CHÍNH */
         #app-container { max-width: 800px; margin: auto; padding: 10px; display: none; }
         .box { background: white; padding: 15px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin-bottom: 15px; border-left: 8px solid var(--tet-red); }
-        h3 { color: var(--tet-red); margin: 0 0 10px 0; font-size: 18px; }
-        input, select, button { padding: 12px; margin: 5px 0; border-radius: 8px; border: 1px solid #ccc; width: 100%; box-sizing: border-box; font-size: 14px; }
+        input, select { padding: 12px; margin: 5px 0; border-radius: 8px; border: 1px solid #ccc; width: 100%; box-sizing: border-box; font-size: 16px; }
+        .btn-app { padding: 15px; background: var(--tet-red); color: white; border-radius: 10px; text-align: center; font-weight: bold; margin: 5px 0; cursor: pointer; -webkit-user-select: none; }
         
-        .order-card { padding: 12px; border-radius: 12px; margin-bottom: 10px; border: 2px solid #eee; position: relative; }
-        .del-order { position: absolute; top: 10px; right: 10px; background: none; border: none; color: #d32f2f; font-weight: bold; font-size: 18px; width: auto; padding: 0; cursor: pointer; }
+        /* THẺ ĐƠN HÀNG */
+        .order-card { display: flex; align-items: center; background: #fff; border-radius: 12px; margin-bottom: 10px; border: 2px solid #eee; overflow: hidden; }
+        .order-info { flex: 1; padding: 12px; }
+        .del-zone { background: #ffebee; color: #d32f2f; width: 65px; align-self: stretch; display: flex; align-items: center; justify-content: center; font-size: 26px; font-weight: bold; cursor: pointer; -webkit-user-select: none; }
         
-        .stat-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
-        .stat-item { padding: 10px; border-radius: 10px; text-align: center; color: white; font-size: 12px; font-weight: bold; }
+        .stat-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }.stat-item { padding: 10px; border-radius: 10px; text-align: center; color: white; font-size: 11px; font-weight: bold; }
     </style>
 </head>
 <body>
 
 <div id="lock-screen">
     <div class="lock-box">
-        <h1 style="margin:0; font-size: 30px;">🧧 TẾT 2026 🧧</h1>
-        <p style="margin: 10px 0;">Chào mừng Big Family 8A</p>
+        <h1 style="margin:0;">🧧 TẾT 2026 🧧</h1>
         <div class="pass-row">
             <input type="password" id="passInput" placeholder="Mật khẩu...">
-            <button class="eye-btn" onclick="togglePass()" id="eyeBtn">👁️</button>
+            <div class="eye-touch" id="eyeBtn" ontouchend="togglePass()" onclick="togglePass()">👁️</div>
         </div>
-        <button class="btn-unlock" onclick="unlock()">MỞ CỬA ĐÓN LỘC</button>
+        <div class="btn-touch-unlock" ontouchend="unlock()" onclick="unlock()">MỞ CỬA ĐÓN LỘC</div>
     </div>
 </div>
 
 <div id="app-container">
     <div class="box" style="display: flex; justify-content: space-between; align-items: center; background: var(--tet-red); color: white; border: none;">
-        <b style="font-size: 18px;">🧧 QUẢN LÝ 8A</b>
-        <button onclick="location.reload()" style="width: 80px; background: var(--tet-gold); color: #b71c1c; padding: 5px; font-size: 12px; border:none; border-radius:5px;">KHÓA</button>
+        <b>🏮 QUẢN LÝ 8A</b>
+        <div ontouchend="location.reload()" onclick="location.reload()" style="background: var(--tet-gold); color: #b71c1c; padding: 5px 10px; border-radius: 5px; font-weight: bold; font-size: 12px;">KHÓA</div>
     </div>
 
     <div class="box">
@@ -59,140 +58,33 @@
         <input type="text" id="setupTen" placeholder="Tên món">
         <input type="number" id="setupBan" placeholder="Giá bán">
         <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 5px;">
-            <input type="number" id="setupVon" placeholder="Vốn" oninput="logicIn('von')">
-            <input type="number" id="setupLai" placeholder="Lãi" oninput="logicIn('lai')">
+            <input type="number" id="setupVon" placeholder="Vốn" oninput="linkIn('von')">
+            <input type="number" id="setupLai" placeholder="Lãi" oninput="linkIn('lai')">
         </div>
-        <button onclick="addProd()" style="background: var(--tet-red); color:white; border:none; font-weight:bold; margin-top: 10px;">LƯU VÀO DANH MỤC</button>
-        <table width="100%" id="menuTable" style="margin-top:10px; text-align: center; font-size: 13px;">
-            <thead><tr style="color:#888;"><th>Món</th><th>Bán</th><th>X</th></tr></thead>
+        <div class="btn-app" ontouchend="addProd()" onclick="addProd()">LƯU MÓN GỐC</div>
+        <table width="100%" id="menuTable" style="margin-top:10px; text-align:center;">
             <tbody></tbody>
         </table>
     </div>
 
     <div class="box">
         <h3>📝 Lên đơn</h3>
-        <input type="text" id="khTen" list="listKhach" placeholder="Tên khách hàng..." onchange="fillLop()">
+        <input type="text" id="khTen" list="listKhach" placeholder="Tên khách..." onchange="fillLop()">
         <datalist id="listKhach"></datalist>
         <input type="text" id="khLop" placeholder="Lớp">
-        <div style="display:flex; gap:5px; margin-top: 5px;">
-            <select id="selectSP" style="flex: 2;"></select>
-            <input type="number" id="inpSL" value="1" min="1" style="flex: 0.7; text-align: center;">
-        </div>
-        <button onclick="addCart()" style="background:#388e3c; color:white; border:none;">+ THÊM VÀO GIỎ</button>
-        <table id="cartTable" width="100%" style="font-size: 13px;"><tbody></tbody></table>
-        <button onclick="checkout()" style="background:#1976d2; color:white; height: 50px; font-size: 16px; border:none; font-weight:bold;">✅ CHỐT ĐƠN</button>
+        <select id="selectSP"></select>
+        <input type="number" id="inpSL" value="1" min="1" style="text-align: center;">
+        <div class="btn-app" ontouchend="addCart()" onclick="addCart()" style="background:#388e3c;">+ THÊM VÀO GIỎ</div>
+        <table id="cartTable" width="100%" style="margin: 10px 0;"><tbody></tbody></table>
+        <div class="btn-app" ontouchend="checkout()" onclick="checkout()" style="background:#1976d2; height: 50px; font-size: 18px; display: flex; align-items: center; justify-content: center;">✅ CHỐT ĐƠN</div>
     </div>
 
     <div class="box">
-        <h3>🏆 LỊCH SỬ GIAO DỊCH</h3>
+        <h3>🏆 LỊCH SỬ</h3>
         <div id="historyList"></div>
     </div>
 
     <div class="box">
         <div class="stat-grid">
-            <div class="stat-item" style="background:#1976d2">Doanh Thu<br><span id="tkDT">0</span></div>
-            <div class="stat-item" style="background:#f57c00">Tiền Vốn<br><span id="tkV">0</span></div>
-            <div class="stat-item" style="background:#388e3c">Lợi Nhuận<br><span id="tkL">0</span></div>
-        </div>
-    </div>
-</div>
-
-<script>
-    const PASS_KEY = "big family 8A";
-
-    function togglePass() {
-        const inp = document.getElementById('passInput');
-        const btn = document.getElementById('eyeBtn');
-        inp.type = inp.type === "password" ? "text" : "password";
-        btn.innerText = inp.type === "password" ? "👁️" : "🙈";
-    }
-
-    function unlock() {
-        if(document.getElementById('passInput').value === PASS_KEY) {
-            document.getElementById('lock-screen').style.display = "none";
-            document.getElementById('app-container').style.display = "block";
-            render();
-        } else { alert("Sai mật khẩu!"); }
-    }
-
-    function logicIn(type) {
-        const v = document.getElementById('setupVon'), l = document.getElementById('setupLai');
-        if(type === 'von') { l.disabled = v.value !== ""; if(v.value !== "") l.value = ""; }
-        else { v.disabled = l.value !== ""; if(l.value !== "") v.value = ""; }
-    }
-
-    let prods = JSON.parse(localStorage.getItem('p_8a_final')) || [];
-    let hist = JSON.parse(localStorage.getItem('h_8a_final')) || [];
-    let cart = [];
-
-    function save() {
-        localStorage.setItem('p_8a_final', JSON.stringify(prods));
-        localStorage.setItem('h_8a_final', JSON.stringify(hist));
-        render();
-    }
-
-    function addProd() {
-        const t = document.getElementById('setupTen').value, b = Number(document.getElementById('setupBan').value);
-        const vV = document.getElementById('setupVon').value, lL = document.getElementById('setupLai').value;
-        if(!t || !b) return;
-        let v = (vV !== "") ? Number(vV) : (lL !== "" ? b - Number(lL) : 0);
-        prods.push({t, v, b}); save();
-        document.getElementById('setupTen').value=''; document.getElementById('setupBan').value='';
-        document.getElementById('setupVon').value=''; document.getElementById('setupLai').value='';
-        document.getElementById('setupVon').disabled = false; document.getElementById('setupLai').disabled = false;
-    }
-
-    function addCart() {
-        const i = document.getElementById('selectSP').value, sl = Number(document.getElementById('inpSL').value);
-        if(i==="") return;
-        const sp = prods[i], ex = cart.find(c => c.t === sp.t);
-        if(ex) ex.sl += sl; else cart.push({...sp, sl});
-        document.querySelector('#cartTable tbody').innerHTML = cart.map(c => `<tr><td>${c.t}</td><td>x${c.sl}</td><td>${(c.sl*c.b).toLocaleString()}đ</td></tr>`).join('');
-    }
-
-    function fillLop() {
-        const n = document.getElementById('khTen').value.trim().toLowerCase();
-        const f = hist.find(o => o.kh.toLowerCase() === n);
-        if(f) document.getElementById('khLop').value = f.l;
-    }
-
-    function checkout() {
-        const n = document.getElementById('khTen').value.trim(), l = document.getElementById('khLop').value.trim() || "8A";
-        if(!n || cart.length === 0) return alert("Nhập tên và chọn món!");
-        hist.push({id: Date.now(), kh: n, l: l, it: [...cart]});
-        cart = []; document.querySelector('#cartTable tbody').innerHTML = ''; document.getElementById('khTen').value = ''; save();
-    }
-
-    function deleteOrder(id) {
-        if(confirm("Bạn có chắc muốn xóa đơn này không?")) {
-            hist = hist.filter(h => h.id !== id);
-            save();
-        }
-    }
-
-    function render() {
-        document.getElementById('selectSP').innerHTML = '<option value="">-- Chọn món --</option>' + prods.map((p,i) => `<option value="${i}">${p.t}</option>`).join('');
-        document.querySelector('#menuTable tbody').innerHTML = prods.map((p,i) => `<tr><td>${p.t}</td><td>${p.b.toLocaleString()}đ</td><td><button onclick="prods.splice(${i},1);save()" style="border:none; background:none; color:red">✕</button></td></tr>`).join('');
-        
-        let dt = 0, v = 0;
-        const sorted = [...hist].reverse().map(h => {
-            let hDT = h.it.reduce((s,i) => s + (i.sl*i.b), 0), hV = h.it.reduce((s,i) => s + (i.sl*i.v), 0);
-            dt += hDT; v += hV;
-            return {...h, total: hDT};
-        });
-
-        document.getElementById('historyList').innerHTML = sorted.map((h) => `
-            <div class="order-card">
-                <button class="del-order" onclick="deleteOrder(${h.id})">✕</button>
-                <b>${h.kh} (${h.l})</b> - <span style="color:var(--tet-red)">${h.total.toLocaleString()}đ</span><br>
-                <small>${h.it.map(i => i.t+' x'+i.sl).join(', ')}</small>
-            </div>`).join('');
-
-        document.getElementById('tkDT').innerText = dt.toLocaleString();
-        document.getElementById('tkV').innerText = v.toLocaleString();
-        document.getElementById('tkL').innerText = (dt - v).toLocaleString();
-        document.getElementById('listKhach').innerHTML = hist.map(h => `<option value="${h.kh}">`).join('');
-    }
-</script>
-</body>
-</html>
+            <div class="stat-item" style="background:#1976d2">D.Thu<br><span id="tkDT">0</span></div>
+            <div class="stat-item" style="background:#f57c00">Vốn<br><span id="tkV">0</span></div>
