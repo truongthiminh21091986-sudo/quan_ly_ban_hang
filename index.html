@@ -3,55 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>8A - QUẢN LÝ XUÂN 2026</title>
+    <title>8A - QUẢN LÝ TẾT 2026</title>
     <style>
         :root { --tet-red: #d32f2f; --tet-gold: #ffeb3b; --bg-xuan: #fffaf0; }
         body { font-family: 'Segoe UI', Arial, sans-serif; background-color: var(--bg-xuan); margin: 0; padding: 0; touch-action: manipulation; }
         
         /* MÀN HÌNH KHÓA */
-        #lock-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #ff5252, #b71c1c); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; color: var(--tet-gold); text-align: center; }
-        .lock-box { width: 90%; max-width: 350px; padding: 25px; border-radius: 15px; border: 3px solid var(--tet-gold); background: rgba(0,0,0,0.1); }
+        #lock-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #ff5252, #b71c1c); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; color: var(--tet-gold); }
+        .lock-box { width: 90%; max-width: 350px; padding: 25px; border-radius: 15px; border: 3px solid var(--tet-gold); background: rgba(0,0,0,0.1); text-align: center; }
         .pass-row { display: flex; background: white; border-radius: 10px; margin: 20px 0; overflow: hidden; height: 55px; align-items: center; }
-        #passInput { flex: 1; border: none; padding: 0 15px; font-size: 18px; outline: none; height: 100%; width: 100%; }
+        #passInput { flex: 1; border: none; padding: 0 15px; font-size: 18px; outline: none; height: 100%; color: #333; }
         
-        /* NÚT MẮT SIÊU NHẠY */
-        .eye-touch { width: 65px; height: 100%; background: #eee; border-left: 1px solid #ddd; font-size: 26px; display: flex; align-items: center; justify-content: center; cursor: pointer; -webkit-user-select: none; }
-
-        /* NÚT MỞ KHÓA SIÊU NHẠY */
-        .btn-touch-unlock { width: 100%; padding: 15px; border-radius: 10px; background: var(--tet-gold); color: #b71c1c; font-weight: bold; font-size: 20px; cursor: pointer; border: none; box-sizing: border-box; -webkit-user-select: none; }
+        /* NÚT MẮT TÁCH BIỆT - TO DỄ CHẠM */
+        .eye-touch { width: 70px; height: 100%; background: #f0f0f0; border-left: 2px solid #ddd; font-size: 28px; display: flex; align-items: center; justify-content: center; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+        .btn-unlock { width: 100%; padding: 15px; border-radius: 10px; background: var(--tet-gold); color: #b71c1c; font-weight: bold; font-size: 20px; cursor: pointer; text-align: center; -webkit-tap-highlight-color: transparent; }
 
         /* APP CHÍNH */
         #app-container { max-width: 800px; margin: auto; padding: 10px; display: none; }
         .box { background: white; padding: 15px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin-bottom: 15px; border-left: 8px solid var(--tet-red); }
         input, select { padding: 12px; margin: 5px 0; border-radius: 8px; border: 1px solid #ccc; width: 100%; box-sizing: border-box; font-size: 16px; }
-        .btn-app { padding: 15px; background: var(--tet-red); color: white; border-radius: 10px; text-align: center; font-weight: bold; margin: 5px 0; cursor: pointer; -webkit-user-select: none; }
+        .btn-app { padding: 15px; background: var(--tet-red); color: white; border-radius: 10px; text-align: center; font-weight: bold; margin: 5px 0; cursor: pointer; }
         
-        /* THẺ ĐƠN HÀNG */
-        .order-card { display: flex; align-items: center; background: #fff; border-radius: 12px; margin-bottom: 10px; border: 2px solid #eee; overflow: hidden; }
+        /* THẺ ĐƠN HÀNG - VÙNG XÓA SIÊU TO */
+        .order-card { display: flex; align-items: center; background: #fff; border-radius: 12px; margin-bottom: 10px; border: 2px solid #eee; overflow: hidden; position: relative; }
         .order-info { flex: 1; padding: 12px; }
-        .del-zone { background: #ffebee; color: #d32f2f; width: 65px; align-self: stretch; display: flex; align-items: center; justify-content: center; font-size: 26px; font-weight: bold; cursor: pointer; -webkit-user-select: none; }
+        .del-zone { background: #ffebee; color: #d32f2f; width: 75px; align-self: stretch; display: flex; align-items: center; justify-content: center; font-size: 30px; font-weight: bold; cursor: pointer; -webkit-tap-highlight-color: transparent; }
         
-        .stat-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
-        .stat-item { padding: 10px; border-radius: 10px; text-align: center; color: white; font-size: 11px; font-weight: bold; }
+        .stat-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }.stat-item { padding: 10px; border-radius: 10px; text-align: center; color: white; font-size: 11px; font-weight: bold; }
     </style>
 </head>
 <body>
 
 <div id="lock-screen">
     <div class="lock-box">
-        <h1 style="margin:0;">🧧 TẾT 2026 🧧</h1>
+        <h1 style="margin:0; font-size: 26px;">🧧 TẾT 2026 🧧</h1>
         <div class="pass-row">
             <input type="password" id="passInput" placeholder="Mật khẩu...">
-            <div class="eye-touch" id="eyeBtn" ontouchend="togglePass()" onclick="togglePass()">👁️</div>
+            <div class="eye-touch" onpointerdown="togglePass(event)">👁️</div>
         </div>
-        <div class="btn-touch-unlock" ontouchend="unlock()" onclick="unlock()">MỞ CỬA ĐÓN LỘC</div>
+        <div class="btn-unlock" onpointerdown="unlock(event)">MỞ CỬA ĐÓN LỘC</div>
     </div>
 </div>
 
 <div id="app-container">
     <div class="box" style="display: flex; justify-content: space-between; align-items: center; background: var(--tet-red); color: white; border: none;">
         <b>🏮 QUẢN LÝ 8A</b>
-        <div ontouchend="location.reload()" onclick="location.reload()" style="background: var(--tet-gold); color: #b71c1c; padding: 5px 10px; border-radius: 5px; font-weight: bold; font-size: 12px;">KHÓA</div>
+        <div onpointerdown="location.reload()" style="background: var(--tet-gold); color: #b71c1c; padding: 5px 12px; border-radius: 5px; font-weight: bold;">KHÓA</div>
     </div>
 
     <div class="box">
@@ -62,10 +59,8 @@
             <input type="number" id="setupVon" placeholder="Vốn" oninput="linkIn('von')">
             <input type="number" id="setupLai" placeholder="Lãi" oninput="linkIn('lai')">
         </div>
-        <div class="btn-app" ontouchend="addProd()" onclick="addProd()">LƯU MÓN GỐC</div>
-        <table width="100%" id="menuTable" style="margin-top:10px; text-align:center;">
-            <tbody></tbody>
-        </table>
+        <div class="btn-app" onpointerdown="addProd(event)">LƯU MÓN GỐC</div>
+        <div id="menuList" style="margin-top:10px; font-size: 14px;"></div>
     </div>
 
     <div class="box">
@@ -75,9 +70,9 @@
         <input type="text" id="khLop" placeholder="Lớp">
         <select id="selectSP"></select>
         <input type="number" id="inpSL" value="1" min="1" style="text-align: center;">
-        <div class="btn-app" ontouchend="addCart()" onclick="addCart()" style="background:#388e3c;">+ THÊM VÀO GIỎ</div>
-        <table id="cartTable" width="100%" style="margin: 10px 0;"><tbody></tbody></table>
-        <div class="btn-app" ontouchend="checkout()" onclick="checkout()" style="background:#1976d2; height: 50px; font-size: 18px; display: flex; align-items: center; justify-content: center;">✅ CHỐT ĐƠN</div>
+        <div class="btn-app" onpointerdown="addCart(event)" style="background:#388e3c;">+ THÊM VÀO GIỎ</div>
+        <div id="cartDisplay" style="margin: 10px 0; font-size: 14px; border-top: 1px dashed #ccc;"></div>
+        <div class="btn-app" onpointerdown="checkout(event)" style="background:#1976d2; height: 55px; display: flex; align-items: center; justify-content: center; font-size: 18px;">✅ CHỐT ĐƠN</div>
     </div>
 
     <div class="box">
@@ -96,105 +91,3 @@
 
 <script>
     const PASS_KEY = "big family 8a";
-
-    function togglePass() {
-        const inp = document.getElementById('passInput');
-        const btn = document.getElementById('eyeBtn');
-        if (inp.type === "password") {
-            inp.type = "text";
-            btn.innerText = "🙈";
-        } else {
-            inp.type = "password";
-            btn.innerText = "👁️";
-        }
-    }
-
-    function unlock() {
-        if(document.getElementById('passInput').value.toLowerCase() === PASS_KEY) {
-            document.getElementById('lock-screen').style.display = "none";
-            document.getElementById('app-container').style.display = "block";
-            render();
-        } else { alert("Sai mật khẩu!"); }
-    }
-
-    function linkIn(type) {
-        const v = document.getElementById('setupVon'), l = document.getElementById('setupLai');
-        if(type === 'von') { l.disabled = v.value !== ""; }
-        else { v.disabled = l.value !== ""; }
-    }
-
-    let prods = JSON.parse(localStorage.getItem('p8a_vFinal')) || [];
-    let hist = JSON.parse(localStorage.getItem('h8a_vFinal')) || [];
-    let cart = [];
-
-    function save() {
-        localStorage.setItem('p8a_vFinal', JSON.stringify(prods));
-        localStorage.setItem('h8a_vFinal', JSON.stringify(hist));
-        render();
-    }
-
-    function addProd() {
-        const t = document.getElementById('setupTen').value, b = Number(document.getElementById('setupBan').value);
-        const vV = document.getElementById('setupVon').value, lL = document.getElementById('setupLai').value;
-        if(!t || !b) return;
-        let v = (vV !== "") ? Number(vV) : (lL !== "" ? b - Number(lL) : 0);
-        prods.push({t, v, b}); save();
-        document.getElementById('setupTen').value=''; document.getElementById('setupBan').value='';
-        document.getElementById('setupVon').value=''; document.getElementById('setupLai').value='';
-        document.getElementById('setupVon').disabled = false; document.getElementById('setupLai').disabled = false;
-    }
-
-    function addCart() {
-        const i = document.getElementById('selectSP').value, sl = Number(document.getElementById('inpSL').value);
-        if(i==="") return;
-        const sp = prods[i], ex = cart.find(c => c.t === sp.t);
-        if(ex) ex.sl += sl; else cart.push({...sp, sl});
-        document.querySelector('#cartTable tbody').innerHTML = cart.map(c => `<tr><td>${c.t}</td><td>x${c.sl}</td><td>${(c.sl*c.b).toLocaleString()}đ</td></tr>`).join('');
-    }
-
-    function fillLop() {
-        const n = document.getElementById('khTen').value.trim().toLowerCase();
-        const f = hist.find(o => o.kh.toLowerCase() === n);
-        if(f) document.getElementById('khLop').value = f.l;
-    }
-
-    function checkout() {
-        const n = document.getElementById('khTen').value.trim(), l = document.getElementById('khLop').value.trim() || "8A";
-        if(!n || cart.length === 0) return alert("Thiếu tên hoặc món!");
-        hist.push({id: Date.now(), kh: n, l: l, it: [...cart]});
-        cart = []; document.querySelector('#cartTable tbody').innerHTML = ''; document.getElementById('khTen').value = ''; save();
-    }
-
-    function delOrder(id) {
-        if(confirm("Xóa đơn này?")) { hist = hist.filter(h => h.id !== id); save(); }
-    }
-
-    function render() {
-        document.getElementById('selectSP').innerHTML = '<option value="">-- Chọn món --</option>' + prods.map((p,i) => `<option value="${i}">${p.t}</option>`).join('');
-        document.querySelector('#menuTable tbody').innerHTML = prods.map((p,i) => `<tr><td style="text-align:left">${p.t}</td><td>${p.b.toLocaleString()}</td><td><div onclick="prods.splice(${i},1);save()" style="color:red; font-weight:bold; font-size:20px; padding:10px;">✕</div></td></tr>`).join('');
-        
-        let dt = 0, v = 0;
-        const sorted = [...hist].reverse().map(h => {
-            let hDT = h.it.reduce((s,i) => s + (i.sl*i.b), 0), hV = h.it.reduce((s,i) => s + (i.sl*i.v), 0);
-            dt += hDT; v += hV;
-            return {...h, total: hDT};
-        });
-
-        document.getElementById('historyList').innerHTML = sorted.map((h) => `
-            <div class="order-card">
-                <div class="order-info">
-                    <b>${h.kh} (${h.l})</b><br>
-                    <b style="color:var(--tet-red)">${h.total.toLocaleString()}đ</b><br>
-                    <small>${h.it.map(i => i.t+' x'+i.sl).join(', ')}</small>
-                </div>
-                <div class="del-zone" ontouchend="delOrder(${h.id})" onclick="delOrder(${h.id})">✕</div>
-            </div>`).join('');
-
-        document.getElementById('tkDT').innerText = dt.toLocaleString();
-        document.getElementById('tkV').innerText = v.toLocaleString();
-        document.getElementById('tkL').innerText = (dt - v).toLocaleString();
-        document.getElementById('listKhach').innerHTML = hist.map(h => `<option value="${h.kh}">`).join('');
-    }
-</script>
-</body>
-</html>
