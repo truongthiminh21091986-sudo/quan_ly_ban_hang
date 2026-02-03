@@ -29,7 +29,8 @@
         .order-info { flex: 1; padding: 12px; }
         .del-zone { background: #ffebee; color: #d32f2f; width: 75px; align-self: stretch; display: flex; align-items: center; justify-content: center; font-size: 30px; font-weight: bold; cursor: pointer; -webkit-tap-highlight-color: transparent; }
         
-        .stat-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }.stat-item { padding: 10px; border-radius: 10px; text-align: center; color: white; font-size: 11px; font-weight: bold; }
+        .stat-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+        .stat-item { padding: 10px; border-radius: 10px; text-align: center; color: white; font-size: 11px; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -91,3 +92,115 @@
 
 <script>
     const PASS_KEY = "big family 8a";
+    let prods = JSON.parse(localStorage.getItem('p8a_vFinal')) || [];
+    let hist = JSON.parse(localStorage.getItem('h8a_vFinal')) || [];
+    let cart = [];
+
+    function togglePass(e) {
+        e.preventDefault();
+        const inp = document.getElementById('passInput');
+        const eye = e.currentTarget;
+        if (inp.type === "password") {
+            inp.type = "text";
+            eye.innerText = "🙈";
+        } else {
+            inp.type = "password";
+            eye.innerText = "👁️";
+        }
+    }
+
+    function unlock(e) {
+        e.preventDefault();
+        if(document.getElementById('passInput').value.toLowerCase() === PASS_KEY) {
+            document.getElementById('lock-screen').style.display = "none";
+            document.getElementById('app-container').style.display = "block";
+            render();
+        } else { alert("Sai mật khẩu!"); }
+    }
+
+    function linkIn(type) {
+        const v = document.getElementById('setupVon'), l = document.getElementById('setupLai');
+        if(type === 'von') { l.disabled = v.value !== ""; }
+        else { v.disabled = l.value !== ""; }
+    }
+
+    function save() {
+        localStorage.setItem('p8a_vFinal', JSON.stringify(prods));
+        localStorage.setItem('h8a_vFinal', JSON.stringify(hist));
+        render();
+    }
+
+    function addProd(e) {
+        e.preventDefault();
+        const t = document.getElementById('setupTen').value, b = Number(document.getElementById('setupBan').value);
+        const vV = document.getElementById('setupVon').value, lL = document.getElementById('setupLai').value;
+        if(!t || !b) return;
+        let v = (vV !== "") ? Number(vV) : (lL !== "" ? b - Number(lL) : 0);
+        prods.push({t, v, b}); save();
+        document.getElementById('setupTen').value=''; document.getElementById('setupBan').value='';
+        document.getElementById('setupVon').value=''; document.getElementById('setupLai').value='';
+        document.getElementById('setupVon').disabled = false; document.getElementById('setupLai').disabled = false;
+    }
+
+    function addCart(e) {
+        e.preventDefault();
+        const i = document.getElementById('selectSP').value, sl = Number(document.getElementById('inpSL').value);
+        if(i==="") return;
+        const sp = prods[i], ex = cart.find(c => c.t === sp.t);
+        if(ex) ex.sl += sl; else cart.push({...sp, sl});
+        document.getElementById('cartDisplay').innerHTML = cart.map(c => `<div>• ${c.t} x${c.sl}: ${(c.sl*c.b).toLocaleString()}đ</div>`).join('');
+    }
+
+    function fillLop() {
+        const n = document.getElementById('khTen').value.trim().toLowerCase();
+        const f = hist.find(o => o.kh.toLowerCase() === n);
+        if(f) document.getElementById('khLop').value = f.l;
+    }
+
+    function checkout(e) {
+        e.preventDefault();
+        const n = document.getElementById('khTen').value.trim(), l = document.getElementById('khLop').value.trim() || "8A";
+        if(!n || cart.length === 0) return alert("Thiếu tên khách hoặc món!");
+        hist.push({id: Date.now(), kh: n, l: l, it: [...cart]});
+        cart = []; document.getElementById('cartDisplay').innerHTML = ''; document.getElementById('khTen').value = ''; save();
+    }
+
+    function delOrder(id, e) {
+        if(e) e.preventDefault();
+        if(confirm("Xóa đơn này?")) { hist = hist.filter(h => h.id !== id); save(); }
+    }
+
+    function render() {
+        document.getElementById('selectSP').innerHTML = '<option value="">-- Chọn món --</option>' + prods.map((p,i) => `<option value="${i}">${p.t}</option>`).join('');
+        
+        document.getElementById('menuList').innerHTML = prods.map((p,i) => 
+            `<div style="display:flex; justify-content:space-between; padding:5px 0; border-bottom:1px solid #eee;">
+                <span>${p.t} (${p.b.toLocaleString()}đ)</span>
+                <span onpointerdown="prods.splice(${i},1);save()" style="color:red; font-weight:bold; padding:0 15px;">✕</span>
+            </div>`).join('');
+        
+        let dt = 0, v = 0;
+        const sorted = [...hist].reverse().map(h => {
+            let hDT = h.it.reduce((s,i) => s + (i.sl*i.b), 0), hV = h.it.reduce((s,i) => s + (i.sl*i.v), 0);
+            dt += hDT; v += hV;
+            return {...h, total: hDT};
+        });
+
+        document.getElementById('historyList').innerHTML = sorted.map((h) => `
+            <div class="order-card">
+                <div class="order-info">
+                    <b>${h.kh} (${h.l})</b><br>
+                    <b style="color:var(--tet-red)">${h.total.toLocaleString()}đ</b><br>
+                    <small>${h.it.map(i => i.t+' x'+i.sl).join(', ')}</small>
+                </div>
+                <div class="del-zone" onpointerdown="delOrder(${h.id}, event)">✕</div>
+            </div>`).join('');
+
+        document.getElementById('tkDT').innerText = dt.toLocaleString();
+        document.getElementById('tkV').innerText = v.toLocaleString();
+        document.getElementById('tkL').innerText = (dt - v).toLocaleString();
+        document.getElementById('listKhach').innerHTML = hist.map(h => `<option value="${h.kh}">`).join('');
+    }
+</script>
+</body>
+</html>
