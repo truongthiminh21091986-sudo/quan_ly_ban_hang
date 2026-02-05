@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+            <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
@@ -6,12 +6,12 @@
     <title>8A - QUẢN LÝ TẾT 2026</title>
     <style>
         :root { --tet-red: #d32f2f; --tet-gold: #ffeb3b; --bg-xuan: #fffaf0; }
-        body { font-family: 'Segoe UI', Arial, sans-serif; background-color: var(--bg-xuan); margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background-color: var(--bg-xuan); margin: 0; padding: 0; touch-action: manipulation; }
         #lock-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #ff5252, #b71c1c); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; color: var(--tet-gold); }
         .lock-box { width: 90%; max-width: 350px; padding: 25px; border-radius: 15px; border: 3px solid var(--tet-gold); background: rgba(0,0,0,0.1); text-align: center; }
         .pass-row { display: flex; background: white; border-radius: 10px; margin: 20px 0; overflow: hidden; height: 55px; align-items: center; }
         #passInput { flex: 1; border: none; padding: 0 15px; font-size: 18px; outline: none; height: 100%; color: #333; }
-        .eye-touch { width: 70px; height: 100%; background: #f0f0f0; border-left: 2px solid #ddd; font-size: 28px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        .eye-touch { width: 70px; height: 100%; background: #f0f0f0; border-left: 2px solid #ddd; font-size: 28px; display: flex; align-items: center; justify-content: center; cursor: pointer; -webkit-tap-highlight-color: transparent; }
         .btn-unlock { width: 100%; padding: 15px; border-radius: 10px; background: var(--tet-gold); color: #b71c1c; font-weight: bold; font-size: 20px; cursor: pointer; text-align: center; }
         #app-container { max-width: 800px; margin: auto; padding: 10px; display: none; }
         .box { background: white; padding: 15px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin-bottom: 15px; border-left: 8px solid var(--tet-red); }
@@ -19,48 +19,33 @@
         .btn-app { padding: 15px; background: var(--tet-red); color: white; border-radius: 10px; text-align: center; font-weight: bold; margin: 5px 0; cursor: pointer; }
         .customer-row { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #eee; }
         .btn-history { background: #1976d2; color: white; border: none; padding: 6px 10px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 12px; }
-        .btn-delete { background: #ff5252; color: white; border: none; padding: 5px 10px; border-radius: 8px; cursor: pointer; margin-left: 5px; font-weight: bold; }
         .filter-container { display: flex; justify-content: flex-end; gap: 5px; margin-bottom: 10px; }
         .btn-day { padding: 6px 12px; border-radius: 20px; border: 1px solid var(--tet-red); background: #fff; color: var(--tet-red); font-weight: bold; font-size: 12px; cursor: pointer; }
-        .btn-day.active { background: var(--tet-red); color: #fff; }
-        #popHistory { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 10000; padding: 20px; box-sizing: border-box; }
-        .pop-box { background: white; max-width: 500px; margin: auto; padding: 20px; border-radius: 15px; max-height: 85vh; overflow-y: auto; }
+        .btn-day.active { background: var(--tet-red); color: #fff; }#popHistory { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 10000; padding: 20px; box-sizing: border-box; }
+        .pop-box { background: white; max-width: 500px; margin: auto; padding: 20px; border-radius: 15px; max-height: 80vh; overflow-y: auto; }
+        .btn-delete { background: #ff5252; color: white; border: none; padding: 4px 8px; border-radius: 5px; font-weight: bold; cursor: pointer; margin-left: 5px; }
         .stat-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 10px; }
-        .stat-item { padding: 10px; border-radius: 10px; text-align: center; color: white; font-size: 11px; font-weight: bold; }
+        .stat-item { padding: 10px; border-radius: 10px; text-align: center; color: white; font-size: 12px; font-weight: bold; }
     </style>
-    <script>
-        // CÁC HÀM CƠ BẢN PHẢI CHẠY ĐƯỢC NGAY
-        function togglePass() {
-            var p = document.getElementById('passInput');
-            p.type = (p.type === 'password') ? 'text' : 'password';
-        }
-        function unlock() {
-            var pass = document.getElementById('passInput').value;
-            if (pass === 'big family 8A') {
-                document.getElementById('lock-screen').style.display = 'none';
-                document.getElementById('app-container').style.display = 'block';
-            } else { alert('Sai mật khẩu!'); }
-        }
-    </script>
 </head>
 <body>
 
 <div id="lock-screen">
     <div class="lock-box">
-        <h1>🧧 BIG FAMILY 8A 🧧</h1>
+        <h1 style="margin:0; font-size: 26px;">🧧 BIG FAMILY 8A 🧧</h1>
         <div class="pass-row">
             <input type="password" id="passInput" placeholder="Mật khẩu...">
-            <div class="eye-touch" onclick="togglePass()">👁️</div>
+            <div class="eye-touch" onpointerdown="togglePass(event)">👁️</div>
         </div>
-        <div class="btn-unlock" onclick="unlock()">MỞ CỬA ĐÓN LỘC</div>
+        <div class="btn-unlock" onpointerdown="unlock(event)">MỞ CỬA ĐÓN LỘC</div>
     </div>
 </div>
 
 <div id="popHistory">
     <div class="pop-box">
         <div style="display:flex; justify-content:space-between; align-items:center;">
-            <h3 id="popTitle" style="margin:0; color:#1976d2;">Chi tiết History</h3>
-            <b onclick="document.getElementById('popHistory').style.display='none'" style="cursor:pointer; font-size:24px;">✖</b>
+            <h3 id="popTitle">Chi tiết</h3>
+            <b onclick="document.getElementById('popHistory').style.display='none'" style="cursor:pointer; font-size:20px;">✖</b>
         </div>
         <div id="popContent" style="margin-top:15px;"></div>
     </div>
@@ -69,9 +54,10 @@
 <div id="app-container">
     <div class="box" style="display:flex; justify-content:space-between; align-items:center; background:var(--tet-red); color:white;">
         <b>🏮 QUẢN LÝ 8A</b>
-        <div onclick="location.reload()" style="background:var(--tet-gold); color:#b71c1c; padding:5px 12px; border-radius:5px; font-weight:bold; cursor:pointer;">KHÓA</div>
+        <div onpointerdown="location.reload()" style="background:var(--tet-gold); color:#b71c1c; padding:5px; border-radius:5px;">KHÓA</div>
     </div>
 
+    <!-- MÓN GỐC -->
     <div class="box">
         <h3>📦 Danh mục món</h3>
         <input type="text" id="setupTen" placeholder="Tên món">
@@ -80,185 +66,146 @@
             <input type="number" id="setupVon" placeholder="Vốn">
             <input type="number" id="setupLai" placeholder="Lãi">
         </div>
-        <div class="btn-app" onclick="window.addProd()">LƯU MÓN GỐC</div>
+        <div class="btn-app" onpointerdown="addProd(event)">LƯU MÓN GỐC</div>
         <div id="menuList"></div>
     </div>
 
+    <!-- LÊN ĐƠN -->
     <div class="box">
         <h3>📝 Lên đơn</h3>
-        <input type="text" id="khTen" list="khSuggestions" placeholder="Tên khách" oninput="window.autoFillClass(this.value)">
+        <input type="text" id="khTen" list="khSuggestions" placeholder="Tên khách" oninput="autoFillClass(this.value)">
         <datalist id="khSuggestions"></datalist>
         <input type="text" id="khLop" placeholder="Lớp">
         <select id="khChonMon"></select>
-        <input type="number" id="khSL" placeholder="Số lượng" value="1">
-        <div class="btn-app" style="background:#4caf50;" onclick="window.addItem()">THÊM MÓN</div>
-        <div id="orderPreview" style="font-size:14px; margin:10px 0; border-left:4px solid #4caf50; padding-left:10px;"></div>
-        <div class="btn-app" onclick="window.checkout()">CHỐT ĐƠN</div>
+        <input type="number" id="khSL" placeholder="Số lượng" value="1"><div class="btn-app" style="background:#4caf50;" onpointerdown="addItem()">THÊM MÓN</div>
+        <div id="orderPreview" style="font-size:14px; margin:10px 0; border-left: 3px solid #4caf50; padding-left: 10px;"></div>
+        <div class="btn-app" onpointerdown="checkout()">CHỐT ĐƠN</div>
     </div>
 
+    <!-- XẾP HẠNG & THỐNG KÊ -->
     <div class="box">
         <div style="display:flex; justify-content:space-between; align-items:center;">
-            <h3>🏆 Xếp hạng & Thống kê</h3>
+            <h3>🏆 Xếp hạng khách</h3>
             <div id="dayFilters" class="filter-container"></div>
         </div>
         <div id="rankList"></div>
+
+        <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
+        
+        <h3>📊 Tổng kết tài chính</h3>
         <div class="stat-grid">
-            <div class="stat-item" style="background:#1976d2;">REV<br><span id="totalRevenue">0</span></div>
-            <div class="stat-item" style="background:#fb8c00;">VỐN<br><span id="totalCapital">0</span></div>
-            <div class="stat-item" style="background:#43a047;">LÃI<br><span id="totalProfit">0</span></div>
+            <div class="stat-item" style="background: #1976d2;">
+                DOANH THU<br><span id="totalRevenue">0</span>
+            </div>
+            <div class="stat-item" style="background: #fb8c00;">
+                TỔNG VỐN<br><span id="totalCapital">0</span>
+            </div>
+            <div class="stat-item" style="background: #43a047;">
+                TỔNG LÃI<br><span id="totalProfit">0</span>
+            </div>
         </div>
     </div>
 </div>
 
-<script type="module">
-    // 1. KẾT NỐI FIREBASE (GIỮ NGUYÊN ĐỒNG BỘ)
-    import { initializeApp } from "https://www.gstatic.com";
-    import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com";
+<script>
+    let prods = []; let cart = []; let orders = []; let filterDay = 'all';
 
-    const firebaseConfig = {
-        apiKey: "", // Replace with your actual API key
-        authDomain: "hoi-xuan-2026-d8b3b.firebaseapp.com",
-        databaseURL: "https://hoi-xuan-2026-d8b3b-default-rtdb.firebaseio.com",
-        projectId: "hoi-xuan-2026-d8b3b",
-        storageBucket: "hoi-xuan-2026-d8b3b.firebasestorage.app",
-        messagingSenderId: "835613161762",
-        appId: "1:835613161762:web:67ae49a1df4680eedecd7b"
-    };
+    function togglePass(e) { if(e) e.preventDefault(); const p = document.getElementById('passInput'); p.type = p.type==='password'?'text':'password'; }
+    function unlock(e) { if(e) e.preventDefault(); if(document.getElementById('passInput').value === 'big family 8A') { document.getElementById('lock-screen').style.display='none'; document.getElementById('app-container').style.display='block'; } else alert('Sai mật khẩu!'); }
 
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-    const rootPath = 'hoi_xuan';
-
-    // 2. KHÔI PHỤC NÚT BẤM (MẮT & MỞ CỬA) - KHÔNG ĐỂ HỎNG NỮA
-    window.togglePass = function(e) {
+    function addProd(e) {
         if(e) e.preventDefault();
-        const p = document.getElementById('passInput');
-        p.type = (p.type === 'password') ? 'text' : 'password';
-    };
-
-    window.unlock = function(e) {
-        if(e) e.preventDefault();
-        const v = document.getElementById('passInput').value;
-        if (v === 'big family 8A') {
-            document.getElementById('lock-screen').style.display = 'none';
-            document.getElementById('app-container').style.display = 'block';
-        } else { alert('Sai mật khẩu "big family 8A"!'); }
-    };
-
-    // 3. LOGIC ĐỒNG BỘ VÀ VỐN LÃI
-    window.prods = []; window.orders = []; window.cart = []; window.filterDay = 'all';
-
-    onValue(ref(db, rootPath + '/products'), (s) => {
-        const d = s.val();
-        window.prods = d ? Object.entries(d).map(([id,v])=>({...v,id})) : [];
-        updateMenu();
-    });
-
-    onValue(ref(db, rootPath + '/orders'), (s) => {
-        const d = s.val();
-        window.orders = d ? Object.entries(d).map(([id,v])=>({...v,id})) : [];
-        updateRank();
-        updateSuggestions();
-    });
-
-    window.addProd = (e) => {
         const t = document.getElementById('setupTen').value.trim();
         const b = document.getElementById('setupBan').value;
         const v = document.getElementById('setupVon').value;
         const l = document.getElementById('setupLai').value;
-        if(!t || !b || (v==="" && l==="")) return alert("Nhập đủ Tên, Giá và Vốn/Lãi!");
+        if(!t || !b || (v==="" && l==="")) return alert("Vui lòng nhập Tên, Giá và Vốn/Lãi!");
         let nV = v!==""?parseFloat(v):(parseFloat(b)-parseFloat(l));
         let nL = l!==""?parseFloat(l):(parseFloat(b)-parseFloat(v));
-        push(ref(db, rootPath + '/products'), { ten:t, ban:parseFloat(b), von:nV, lai:nL });
-        document.getElementById('setupTen').value=''; document.getElementById('setupBan').value='';
-        document.getElementById('setupVon').value=''; document.getElementById('setupLai').value='';
-    };
+        prods.push({ten:t, ban:parseFloat(b), von:nV, lai:nL});
+        updateMenu();
+        document.getElementById('setupTen').value=''; document.getElementById('setupBan').value=''; document.getElementById('setupVon').value=''; document.getElementById('setupLai').value='';
+    }
 
     function updateMenu() {
         const list = document.getElementById('menuList'); const sel = document.getElementById('khChonMon');
         list.innerHTML = ''; sel.innerHTML = '<option value="">-- Chọn món --</option>';
-        window.prods.forEach(p => {
-            list.innerHTML += `<div class="customer-row"><span>${p.ten}</span><b class="btn-delete" onclick="window.delProd('${p.id}')">X</b></div>`;
-            sel.innerHTML += `<option value="${p.id}">${p.ten}</option>`;
+        prods.forEach((p, i) => {list.innerHTML += `<div class="customer-row"><span>${p.ten} (${p.ban.toLocaleString()}đ)</span><b class="btn-delete" onclick="prods.splice(${i},1);updateMenu()">X</b></div>`;
+            sel.innerHTML += `<option value="${i}">${p.ten}</option>`;
         });
     }
 
-    window.delProd = (id) => { if(confirm('Xóa món?')) remove(ref(db, rootPath + '/products/' + id)); };
+    function addItem() {
+        const i = document.getElementById('khChonMon').value; const s = document.getElementById('khSL').value;
+        if(i==="" || s<=0) return;
+        cart.push({...prods[i], sl: parseInt(s)});
+        renderOrderPreview();
+    }
 
-    window.addItem = () => {
-        const id = document.getElementById('khChonMon').value;
-        const sl = document.getElementById('khSL').value;
-        const p = window.prods.find(i => i.id === id);
-        if(!p || sl <= 0) return;
-        window.cart.push({...p, sl: parseInt(sl)});
-        renderCart();
-    };
-
-    function renderCart() {
-        document.getElementById('orderPreview').innerHTML = window.cart.map((c, i) =>
-            `• ${c.ten} x${c.sl} <b style="color:red" onclick="window.cart.splice(${i},1);renderCart()">[x]</b>`
+    function renderOrderPreview() {
+        document.getElementById('orderPreview').innerHTML = cart.map((c,idx) => 
+            `• ${c.ten} x${c.sl} <b style="color:red; cursor:pointer;" onclick="cart.splice(${idx},1);renderOrderPreview()">[x]</b>`
         ).join('<br>');
     }
 
-    window.checkout = () => {
-        const n = document.getElementById('khTen').value.trim();
-        const l = document.getElementById('khLop').value.trim();
-        if(!n || window.cart.length===0) return alert("Thiếu tên hoặc món!");
+    function autoFillClass(name) {
+        const found = orders.find(o => o.khName === name);
+        if(found) document.getElementById('khLop').value = found.khLop;
+    }
+
+    function checkout() {
+        const n = document.getElementById('khTen').value.trim(); const l = document.getElementById('khLop').value.trim();
+        if(!n || cart.length===0) return alert("Thiếu tên khách hoặc chưa có món!");
         const now = new Date();
-        push(ref(db, rootPath + '/orders'), {
-            kh: n + " - " + l, khName: n, khLop: l,
+        orders.push({
+            id: Date.now(), kh: n + " - " + l, khName: n, khLop: l,
             date: now.toLocaleDateString('vi-VN'), time: now.toLocaleString('vi-VN'),
-            items: [...window.cart],
-            total: window.cart.reduce((s,i)=>s+(i.ban*i.sl),0),
-            capital: window.cart.reduce((s,i)=>s+(i.von*i.sl),0),
-            profit: window.cart.reduce((s,i)=>s+(i.lai*i.sl),0)
+            items: [...cart], 
+            total: cart.reduce((s,i)=>s+(i.ban*i.sl),0),
+            capital: cart.reduce((s,i)=>s+(i.von*i.sl),0),
+            profit: cart.reduce((s,i)=>s+(i.lai*i.sl),0)
         });
-        window.cart = []; document.getElementById('khTen').value='';
-        document.getElementById('khLop').value=''; document.getElementById('orderPreview').innerHTML='';
-    };
+        cart=[]; document.getElementById('khTen').value=''; document.getElementById('khLop').value=''; document.getElementById('orderPreview').innerHTML='';
+        updateRank();
+        const dl = document.getElementById('khSuggestions');
+        dl.innerHTML = [...new Set(orders.map(o => o.khName))].map(n => `<option value="${n}">`).join('');
+    }
 
     function updateRank() {
-        const days = [...new Set(window.orders.map(o => o.date))];
-        const fBox = document.getElementById('dayFilters');
-        fBox.innerHTML = `<div class="btn-day ${window.filterDay==='all'?'active':''}" onclick="window.setFilter('all')">Tất cả</div>`;
-        days.forEach((d, i) => fBox.innerHTML += `<div class="btn-day ${window.filterDay===d?'active':''}" onclick="window.setFilter('${d}')">Ngày ${i+1}</div>`);
-        let f = window.filterDay==='all' ? window.orders : window.orders.filter(o => o.date === window.filterDay);
+        const days = [...new Set(orders.map(o => o.date))];
+        const filterBox = document.getElementById('dayFilters');
+        filterBox.innerHTML = `<button class="btn-day ${filterDay==='all'?'active':''}" onclick="filterDay='all';updateRank()">Tất cả</button>`;
+        days.forEach((d, i) => filterBox.innerHTML += `<button class="btn-day ${filterDay===d?'active':''}" onclick="filterDay='${d}';updateRank()">Ngày ${i+1}</button>`);
+
+        let filtered = filterDay==='all' ? orders : orders.filter(o => o.date === filterDay);
+        
+        // Tính toán tổng kết tài chính
         let rev = 0, cap = 0, pro = 0;
-        f.forEach(o => { rev += o.total; cap += o.capital; pro += o.profit; });
+        filtered.forEach(o => { rev += o.total; cap += o.capital; pro += o.profit; });
         document.getElementById('totalRevenue').innerText = rev.toLocaleString();
-        document.getElementById('totalCapital').innerText = cap.toLocaleString();
-        document.getElementById('totalProfit').innerText = pro.toLocaleString();
-        let rank = {};
-        f.forEach(o => { rank[o.kh] = (rank[o.kh] || 0) + o.total; });
+        document.getElementById('totalCapital').innerText = cap.toLocaleString();let rank = {};
+        filtered.forEach(o => { rank[o.kh] = (rank[o.kh] || 0) + o.total; });
         const sorted = Object.keys(rank).sort((a,b) => rank[b] - rank[a]);
         document.getElementById('rankList').innerHTML = sorted.map((k,i) => `
             <div class="customer-row">
                 <span>${i+1}. <b>${k}</b>: ${rank[k].toLocaleString()}đ</span>
-                <div>
-                    <button class="btn-history" onclick="window.showHis('${k}')">HISTORY</button>
-                    <button class="btn-delete" onclick="window.delKh('${k}')">X</button>
-                </div>
-            </div>`).join('');
+                <div><button class="btn-history" onclick="showHis('${k}')">HISTORY</button><button class="btn-delete" onclick="if(confirm('Xóa hết lịch sử khách này?')){orders=orders.filter(o=>o.kh!=='${k}');updateRank()}">X</button></div>
+            </div>
+        `).join('');
     }
 
-    window.setFilter = (d) => { window.filterDay = d; updateRank(); };
-
-    window.showHis = (kh) => {
-        let f = window.filterDay==='all' ? window.orders : window.orders.filter(o => o.date === window.filterDay);
+    function showHis(kh) {
+        let f = filterDay==='all' ? orders : orders.filter(o => o.date === filterDay);
         let his = f.filter(o => o.kh === kh);
         document.getElementById('popTitle').innerText = kh;
         document.getElementById('popContent').innerHTML = his.map(h => `
-            <div class="his-item" style="display:flex; justify-content:space-between; align-items:center;">
+            <div style="border-bottom:1px dashed #ccc; padding:10px 0; display:flex; justify-content:space-between; align-items:center;">
                 <div><b>📅 ${h.time}</b><br>${h.items.map(i => `- ${i.ten} x${i.sl}`).join('<br>')} <br><span style="color:red">Bill: ${h.total.toLocaleString()}đ</span></div>
-                <button class="btn-delete" onclick="window.delOrder('${h.id}','${kh}')">Xóa đơn</button>
-            </div>`).join('');
+                <button class="btn-delete" onclick="if(confirm('Xóa đơn này?')){orders=orders.filter(o=>o.id!=${h.id});updateRank();showHis('${kh}')}">Xóa đơn</button>
+            </div>
+        `).join('');
         document.getElementById('popHistory').style.display='block';
-    };
-
-    window.delOrder = (id, kh) => { if(confirm('Xóa đơn?')) remove(ref(db, rootPath + '/orders/' + id)); document.getElementById('popHistory').style.display='none'; };
-    window.delKh = (kh) => { if(confirm('Xóa sạch?')) window.orders.filter(o => o.kh === kh).forEach(o => remove(ref(db, rootPath + '/orders/' + o.id))); };
-    window.autoFillClass = (n) => { const f = window.orders.find(o=>o.khName===n); if(f) document.getElementById('khLop').value=f.khLop; };
-    function updateSuggestions() { document.getElementById('khSuggestions').innerHTML = [...new Set(window.orders.map(o=>o.khName))].map(n=>`<option value="${n}">`).join(''); }
+    }
 </script>
 </body>
 </html>
