@@ -1,4 +1,4 @@
-                    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
@@ -22,7 +22,8 @@
         .btn-delete { background: #ff5252; color: white; border: none; padding: 5px 10px; border-radius: 8px; cursor: pointer; margin-left: 5px; font-weight: bold; }
         .filter-container { display: flex; justify-content: flex-end; gap: 5px; margin-bottom: 10px; }
         .btn-day { padding: 6px 12px; border-radius: 20px; border: 1px solid var(--tet-red); background: #fff; color: var(--tet-red); font-weight: bold; font-size: 12px; cursor: pointer; }
-        .btn-day.active { background: var(--tet-red); color: #fff; }#popHistory { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 10000; padding: 20px; box-sizing: border-box; }
+        .btn-day.active { background: var(--tet-red); color: #fff; }
+        #popHistory { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 10000; padding: 20px; box-sizing: border-box; }
         .pop-box { background: white; max-width: 500px; margin: auto; padding: 20px; border-radius: 15px; max-height: 85vh; overflow-y: auto; }
         .stat-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 10px; }
         .stat-item { padding: 10px; border-radius: 10px; text-align: center; color: white; font-size: 11px; font-weight: bold; }
@@ -84,7 +85,8 @@
     </div>
 
     <div class="box">
-        <h3>📝 Lên đơn</h3><input type="text" id="khTen" list="khSuggestions" placeholder="Tên khách" oninput="window.autoFillClass(this.value)">
+        <h3>📝 Lên đơn</h3>
+        <input type="text" id="khTen" list="khSuggestions" placeholder="Tên khách" oninput="window.autoFillClass(this.value)">
         <datalist id="khSuggestions"></datalist>
         <input type="text" id="khLop" placeholder="Lớp">
         <select id="khChonMon"></select>
@@ -147,7 +149,8 @@
     window.prods = []; window.orders = []; window.cart = []; window.filterDay = 'all';
 
     onValue(ref(db, rootPath + '/products'), (s) => {
-        const d = s.val();window.prods = d ? Object.entries(d).map(([id,v])=>({...v,id})) : [];
+        const d = s.val();
+        window.prods = d ? Object.entries(d).map(([id,v])=>({...v,id})) : [];
         updateMenu();
     });
 
@@ -207,7 +210,8 @@
             date: now.toLocaleDateString('vi-VN'), time: now.toLocaleString('vi-VN'),
             items: [...window.cart],
             total: window.cart.reduce((s,i)=>s+(i.ban*i.sl),0),
-            capital: window.cart.reduce((s,i)=>s+(i.von*i.sl),0),profit: window.cart.reduce((s,i)=>s+(i.lai*i.sl),0)
+            capital: window.cart.reduce((s,i)=>s+(i.von*i.sl),0),
+            profit: window.cart.reduce((s,i)=>s+(i.lai*i.sl),0)
         });
         window.cart = []; document.getElementById('khTen').value='';
         document.getElementById('khLop').value=''; document.getElementById('orderPreview').innerHTML='';
@@ -251,7 +255,8 @@
         document.getElementById('popHistory').style.display='block';
     };
 
-    window.delOrder = (id, kh) => { if(confirm('Xóa đơn?')) remove(ref(db, rootPath + '/orders/' + id)); document.getElementById('popHistory').style.display='none'; };window.delKh = (kh) => { if(confirm('Xóa sạch?')) window.orders.filter(o => o.kh === kh).forEach(o => remove(ref(db, rootPath + '/orders/' + o.id))); };
+    window.delOrder = (id, kh) => { if(confirm('Xóa đơn?')) remove(ref(db, rootPath + '/orders/' + id)); document.getElementById('popHistory').style.display='none'; };
+    window.delKh = (kh) => { if(confirm('Xóa sạch?')) window.orders.filter(o => o.kh === kh).forEach(o => remove(ref(db, rootPath + '/orders/' + o.id))); };
     window.autoFillClass = (n) => { const f = window.orders.find(o=>o.khName===n); if(f) document.getElementById('khLop').value=f.khLop; };
     function updateSuggestions() { document.getElementById('khSuggestions').innerHTML = [...new Set(window.orders.map(o=>o.khName))].map(n=>`<option value="${n}">`).join(''); }
 </script>
