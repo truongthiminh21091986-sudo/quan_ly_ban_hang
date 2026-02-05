@@ -21,8 +21,7 @@
         .btn-history { background: #1976d2; color: white; border: none; padding: 6px 10px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 12px; }
         .filter-container { display: flex; justify-content: flex-end; gap: 5px; margin-bottom: 10px; }
         .btn-day { padding: 6px 12px; border-radius: 20px; border: 1px solid var(--tet-red); background: #fff; color: var(--tet-red); font-weight: bold; font-size: 12px; cursor: pointer; }
-        .btn-day.active { background: var(--tet-red); color: #fff; }
-        #popHistory { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 10000; padding: 20px; box-sizing: border-box; }
+        .btn-day.active { background: var(--tet-red); color: #fff; }#popHistory { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 10000; padding: 20px; box-sizing: border-box; }
         .pop-box { background: white; max-width: 500px; margin: auto; padding: 20px; border-radius: 15px; max-height: 80vh; overflow-y: auto; }
         .btn-delete { background: #ff5252; color: white; border: none; padding: 4px 8px; border-radius: 5px; font-weight: bold; cursor: pointer; margin-left: 5px; }
         .stat-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 10px; }
@@ -58,7 +57,6 @@
         <div onpointerdown="location.reload()" style="background:var(--tet-gold); color:#b71c1c; padding:5px; border-radius:5px;">KHÓA</div>
     </div>
 
-    <!-- MÓN GỐC -->
     <div class="box">
         <h3>📦 Danh mục món</h3>
         <input type="text" id="setupTen" placeholder="Tên món">
@@ -71,7 +69,6 @@
         <div id="menuList"></div>
     </div>
 
-    <!-- LÊN ĐƠN -->
     <div class="box">
         <h3>📝 Lên đơn</h3>
         <input type="text" id="khTen" list="khSuggestions" placeholder="Tên khách" oninput="autoFillClass(this.value)">
@@ -79,32 +76,22 @@
         <input type="text" id="khLop" placeholder="Lớp">
         <select id="khChonMon"></select>
         <input type="number" id="khSL" placeholder="Số lượng" value="1">
-        <div class="btn-app" style="background:#4caf50;" onpointerdown="addItem()">THÊM MÓN</div>
-        <div id="orderPreview" style="font-size:14px; margin:10px 0; border-left: 3px solid #4caf50; padding-left: 10px;"></div>
+        <div class="btn-app" style="background:#4caf50;" onpointerdown="addItem()">THÊM MÓN</div><div id="orderPreview" style="font-size:14px; margin:10px 0; border-left: 3px solid #4caf50; padding-left: 10px;"></div>
         <div class="btn-app" onpointerdown="checkout()">CHỐT ĐƠN</div>
     </div>
 
-    <!-- XẾP HẠNG & THỐNG KÊ -->
     <div class="box">
         <div style="display:flex; justify-content:space-between; align-items:center;">
             <h3>🏆 Xếp hạng khách</h3>
             <div id="dayFilters" class="filter-container"></div>
         </div>
         <div id="rankList"></div>
-
         <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
-        
         <h3>📊 Tổng kết tài chính</h3>
         <div class="stat-grid">
-            <div class="stat-item" style="background: #1976d2;">
-                DOANH THU<br><span id="totalRevenue">0</span>
-            </div>
-            <div class="stat-item" style="background: #fb8c00;">
-                TỔNG VỐN<br><span id="totalCapital">0</span>
-            </div>
-            <div class="stat-item" style="background: #43a047;">
-                TỔNG LÃI<br><span id="totalProfit">0</span>
-            </div>
+            <div class="stat-item" style="background: #1976d2;">DOANH THU<br><span id="totalRevenue">0</span></div>
+            <div class="stat-item" style="background: #fb8c00;">TỔNG VỐN<br><span id="totalCapital">0</span></div>
+            <div class="stat-item" style="background: #43a047;">TỔNG LÃI<br><span id="totalProfit">0</span></div>
         </div>
     </div>
 </div>
@@ -121,7 +108,7 @@
         const b = document.getElementById('setupBan').value;
         const v = document.getElementById('setupVon').value;
         const l = document.getElementById('setupLai').value;
-        if(!t || !b || (v==="" && l==="")) return alert("Vui lòng nhập Tên, Giá và Vốn/Lãi!");
+        if(!t || !b || (v==="" && l==="")) return alert("Nhập đủ Tên, Giá và Vốn/Lãi!");
         let nV = v!==""?parseFloat(v):(parseFloat(b)-parseFloat(l));
         let nL = l!==""?parseFloat(l):(parseFloat(b)-parseFloat(v));
         prods.push({ten:t, ban:parseFloat(b), von:nV, lai:nL});
@@ -138,17 +125,14 @@
         });
     }
 
-    function addItem() {
-        const i = document.getElementById('khChonMon').value; const s = document.getElementById('khSL').value;
+    function addItem() {const i = document.getElementById('khChonMon').value; const s = document.getElementById('khSL').value;
         if(i==="" || s<=0) return;
         cart.push({...prods[i], sl: parseInt(s)});
         renderOrderPreview();
     }
 
     function renderOrderPreview() {
-        document.getElementById('orderPreview').innerHTML = cart.map((c,idx) => 
-            `• ${c.ten} x${c.sl} <b style="color:red; cursor:pointer;" onclick="cart.splice(${idx},1);renderOrderPreview()">[x]</b>`
-        ).join('<br>');
+        document.getElementById('orderPreview').innerHTML = cart.map((c,idx) => `• ${c.ten} x${c.sl} <b style="color:red; cursor:pointer;" onclick="cart.splice(${idx},1);renderOrderPreview()">[x]</b>`).join('<br>');
     }
 
     function autoFillClass(name) {
@@ -158,20 +142,12 @@
 
     function checkout() {
         const n = document.getElementById('khTen').value.trim(); const l = document.getElementById('khLop').value.trim();
-        if(!n || cart.length===0) return alert("Thiếu tên khách hoặc chưa có món!");
+        if(!n || cart.length===0) return alert("Thiếu tên khách hoặc món!");
         const now = new Date();
-        orders.push({
-            id: Date.now(), kh: n + " - " + l, khName: n, khLop: l,
-            date: now.toLocaleDateString('vi-VN'), time: now.toLocaleString('vi-VN'),
-            items: [...cart], 
-            total: cart.reduce((s,i)=>s+(i.ban*i.sl),0),
-            capital: cart.reduce((s,i)=>s+(i.von*i.sl),0),
-            profit: cart.reduce((s,i)=>s+(i.lai*i.sl),0)
-        });
+        orders.push({ id: Date.now(), kh: n + " - " + l, khName: n, khLop: l, date: now.toLocaleDateString('vi-VN'), time: now.toLocaleString('vi-VN'), items: [...cart], total: cart.reduce((s,i)=>s+(i.ban*i.sl),0), capital: cart.reduce((s,i)=>s+(i.von*i.sl),0), profit: cart.reduce((s,i)=>s+(i.lai*i.sl),0) });
         cart=[]; document.getElementById('khTen').value=''; document.getElementById('khLop').value=''; document.getElementById('orderPreview').innerHTML='';
         updateRank();
-        const dl = document.getElementById('khSuggestions');
-        dl.innerHTML = [...new Set(orders.map(o => o.khName))].map(n => `<option value="${n}">`).join('');
+        document.getElementById('khSuggestions').innerHTML = [...new Set(orders.map(o => o.khName))].map(n => `<option value="${n}">`).join('');
     }
 
     function updateRank() {
@@ -179,63 +155,24 @@
         const filterBox = document.getElementById('dayFilters');
         filterBox.innerHTML = `<button class="btn-day ${filterDay==='all'?'active':''}" onclick="filterDay='all';updateRank()">Tất cả</button>`;
         days.forEach((d, i) => filterBox.innerHTML += `<button class="btn-day ${filterDay===d?'active':''}" onclick="filterDay='${d}';updateRank()">Ngày ${i+1}</button>`);
-
         let filtered = filterDay==='all' ? orders : orders.filter(o => o.date === filterDay);
-        
-        // Tính toán tổng kết tài chính
         let rev = 0, cap = 0, pro = 0;
         filtered.forEach(o => { rev += o.total; cap += o.capital; pro += o.profit; });
         document.getElementById('totalRevenue').innerText = rev.toLocaleString();
         document.getElementById('totalCapital').innerText = cap.toLocaleString();
         document.getElementById('totalProfit').innerText = pro.toLocaleString();
-
         let rank = {};
         filtered.forEach(o => { rank[o.kh] = (rank[o.kh] || 0) + o.total; });
-        const sorted = Object.keys(rank).sort((a,b) => rank[b] - rank[a]);
-        document.getElementById('rankList').innerHTML = sorted.map((k,i) => `
-            <div class="customer-row">
-                <span>${i+1}. <b>${k}</b>: ${rank[k].toLocaleString()}đ</span>
-                <div><button class="btn-history" onclick="showHis('${k}')">HISTORY</button><button class="btn-delete" onclick="if(confirm('Xóa hết lịch sử khách này?')){orders=orders.filter(o=>o.kh!=='${k}');updateRank()}">X</button></div>
-            </div>
-        `).join('');
+        const sorted = Object.keys(rank).sort((a,b) => rank[b] - rank[a]);document.getElementById('rankList').innerHTML = sorted.map((k,i) => `<div class="customer-row"><span>${i+1}. <b>${k}</b>: ${rank[k].toLocaleString()}đ</span><div><button class="btn-history" onclick="showHis('${k}')">HISTORY</button><button class="btn-delete" onclick="if(confirm('Xóa hết khách này?')){orders=orders.filter(o=>o.kh!=='${k}');updateRank()}">X</button></div></div>`).join('');
     }
 
     function showHis(kh) {
         let f = filterDay==='all' ? orders : orders.filter(o => o.date === filterDay);
         let his = f.filter(o => o.kh === kh);
         document.getElementById('popTitle').innerText = kh;
-        document.getElementById('popContent').innerHTML = his.map(h => `
-            <div style="border-bottom:1px dashed #ccc; padding:10px 0; display:flex; justify-content:space-between; align-items:center;">
-                <div><b>📅 ${h.time}</b><br>${h.items.map(i => `- ${i.ten} x${i.sl}`).join('<br>')} <br><span style="color:red">Bill: ${h.total.toLocaleString()}đ</span></div>
-                <button class="btn-delete" onclick="if(confirm('Xóa đơn này?')){orders=orders.filter(o=>o.id!=${h.id});updateRank();showHis('${kh}')}">Xóa đơn</button>
-            </div>
-        `).join('');
+        document.getElementById('popContent').innerHTML = his.map(h => `<div style="border-bottom:1px dashed #ccc; padding:10px 0; display:flex; justify-content:space-between; align-items:center;"><div><b>📅 ${h.time}</b><br>${h.items.map(i => `- ${i.ten} x${i.sl}`).join('<br>')} <br><span style="color:red">Bill: ${h.total.toLocaleString()}đ</span></div><button class="btn-delete" onclick="if(confirm('Xóa đơn này?')){orders=orders.filter(o=>o.id!=${h.id});updateRank();showHis('${kh}')}">Xóa đơn</button></div>`).join('');
         document.getElementById('popHistory').style.display='block';
     }
-<script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
-
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  const firebaseConfig = {
-    apiKey: "AIzaSyBYpeRdzt5gdFBBT1jr8glkzseRdEzyLZc",
-    authDomain: "hoi-xuan-2026-d8b3b.firebaseapp.com",
-    databaseURL: "https://hoi-xuan-2026-d8b3b-default-rtdb.firebaseio.com",
-    projectId: "hoi-xuan-2026-d8b3b",
-    storageBucket: "hoi-xuan-2026-d8b3b.firebasestorage.app",
-    messagingSenderId: "835613161762",
-    appId: "1:835613161762:web:67ae49a1df4680eedecd7b",
-    measurementId: "G-C2DPYVRV92"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-</script></script>
+</script>
 </body>
 </html>
-
