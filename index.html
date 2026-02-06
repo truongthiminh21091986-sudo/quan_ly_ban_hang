@@ -21,7 +21,8 @@
         .btn-history { background: #1976d2; color: white; border: none; padding: 6px 10px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 12px; }
         .filter-container { display: flex; justify-content: flex-end; gap: 5px; margin-bottom: 10px; overflow-x: auto; }
         .btn-day { padding: 6px 12px; border-radius: 20px; border: 1px solid var(--tet-red); background: #fff; color: var(--tet-red); font-weight: bold; font-size: 12px; cursor: pointer; white-space: nowrap; }
-        .btn-day.active { background: var(--tet-red); color: #fff; }#popHistory { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 10000; padding: 20px; box-sizing: border-box; }
+        .btn-day.active { background: var(--tet-red); color: #fff; }
+        #popHistory { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 10000; padding: 20px; box-sizing: border-box; }
         .pop-box { background: white; max-width: 500px; margin: auto; padding: 20px; border-radius: 15px; max-height: 80vh; overflow-y: auto; }
         .stat-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 10px; }
         .stat-item { padding: 10px; border-radius: 10px; text-align: center; color: white; font-size: 11px; font-weight: bold; }
@@ -73,7 +74,8 @@
 
     <div class="box">
         <h3>📝 Lên đơn</h3>
-        <input type="text" id="khTen" list="khSuggestions" placeholder="Tên khách" oninput="autoFillClass(this.value)"><datalist id="khSuggestions"></datalist>
+        <input type="text" id="khTen" list="khSuggestions" placeholder="Tên khách" oninput="autoFillClass(this.value)">
+        <datalist id="khSuggestions"></datalist>
         <input type="text" id="khLop" placeholder="Lớp">
         <select id="khChonMon"></select>
         <input type="number" id="khSL" placeholder="Số lượng" value="1">
@@ -134,7 +136,8 @@
         document.getElementById('setupVon').value=''; document.getElementById('setupLai').value='';
     }
 
-    function removeProd(index) {if(confirm("Xóa món này khỏi danh mục gốc?")) {
+    function removeProd(index) {
+        if(confirm("Xóa món này khỏi danh mục gốc?")) {
             prods.splice(index, 1);
             save(); renderMenu();
         }
@@ -201,7 +204,8 @@
         document.getElementById('totalRevenue').innerText = rev.toLocaleString();
         document.getElementById('totalCapital').innerText = cap.toLocaleString();
         document.getElementById('totalProfit').innerText = prof.toLocaleString();
-        const dates = ['all', ...new Set(orders.map(o => o.date))];document.getElementById('dayFilters').innerHTML = dates.map(d => `<div class="btn-day ${filterDay===d?'active':''}" onpointerdown="setFilter('${d}')">${d==='all'?'Tất cả':d}</div>`).join('');
+        const dates = ['all', ...new Set(orders.map(o => o.date))];
+        document.getElementById('dayFilters').innerHTML = dates.map(d => `<div class="btn-day ${filterDay===d?'active':''}" onpointerdown="setFilter('${d}')">${d==='all'?'Tất cả':d}</div>`).join('');
     }
 
     function setFilter(d) { filterDay = d; renderStats(); renderRank(); }
